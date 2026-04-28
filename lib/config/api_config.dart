@@ -1,4 +1,4 @@
-const String groqApiKey = 'PASTE_YOUR_GROQ_API_KEY_HERE';
+const String groqApiKey = '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';
 const String groqApiEndpoint =
     'https://api.groq.com/openai/v1/chat/completions';
 const String groqModel = 'llama-3.1-8b-instant';

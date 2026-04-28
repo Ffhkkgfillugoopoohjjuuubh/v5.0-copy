@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:http/http.dart' as http;
 
@@ -12,7 +13,7 @@ class ApiService {
 
   Future<String> sendMessage(List<ChatMessage> messages) async {
     if (_isPlaceholderKey) {
-      throw Exception('Add your Groq API key in lib/config/api_config.dart.');
+      return 'API key error. Please contact support.';
     }
 
     final payload = <String, dynamic>{
@@ -32,31 +33,44 @@ class ApiService {
       'temperature': 0.7,
     };
 
-    final response = await _client.post(
-      Uri.parse(groqApiEndpoint),
-      headers: <String, String>{
-        'Authorization': 'Bearer $groqApiKey',
-        'Content-Type': 'application/json',
-      },
-      body: jsonEncode(payload),
-    );
+    try {
+      final response = await _client.post(
+        Uri.parse(groqApiEndpoint),
+        headers: <String, String>{
+          'Authorization': 'Bearer $groqApiKey',
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(payload),
+      );
 
-    if (response.statusCode < 200 || response.statusCode >= 300) {
-      throw Exception(_extractErrorMessage(response.body));
+      if (response.statusCode < 200 || response.statusCode >= 300) {
+        final friendly = _friendlyMessageForStatusCode(response.statusCode);
+        if (friendly != null) {
+          return friendly;
+        }
+
+        return 'Unable to connect to Echo AI. Please check your internet connection or try again later.';
+      }
+
+      final json = jsonDecode(response.body) as Map<String, dynamic>;
+      final choices = json['choices'] as List<dynamic>? ?? <dynamic>[];
+      final firstChoice =
+          choices.isNotEmpty ? choices.first as Map<String, dynamic> : null;
+      final message = firstChoice?['message'] as Map<String, dynamic>?;
+      final content = message?['content'] as String?;
+
+      if (content == null || content.trim().isEmpty) {
+        return 'Unable to connect to Echo AI. Please check your internet connection or try again later.';
+      }
+
+      return content.trim();
+    } on SocketException {
+      return 'Unable to connect to Echo AI. Please check your internet connection or try again later.';
+    } on http.ClientException {
+      return 'Unable to connect to Echo AI. Please check your internet connection or try again later.';
+    } catch (_) {
+      return 'Unable to connect to Echo AI. Please check your internet connection or try again later.';
     }
-
-    final json = jsonDecode(response.body) as Map<String, dynamic>;
-    final choices = json['choices'] as List<dynamic>? ?? <dynamic>[];
-    final firstChoice =
-        choices.isNotEmpty ? choices.first as Map<String, dynamic> : null;
-    final message = firstChoice?['message'] as Map<String, dynamic>?;
-    final content = message?['content'] as String?;
-
-    if (content == null || content.trim().isEmpty) {
-      throw Exception('Groq returned an empty response.');
-    }
-
-    return content.trim();
   }
 
   Future<String> expandResponse(String original) async {
@@ -146,5 +160,12 @@ class ApiService {
     } catch (_) {
       return 'Groq request failed.';
     }
+  }
+
+  String? _friendlyMessageForStatusCode(int statusCode) {
+    if (statusCode == 401 || statusCode == 403) {
+      return 'API key error. Please contact support.';
+    }
+    return null;
   }
 }
