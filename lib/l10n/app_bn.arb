@@ -1,0 +1,97 @@
+{
+  "@@locale": "bn",
+  "appName": "Echo AI",
+  "chatTab": "চ্যাট",
+  "newsTab": "সংবাদ",
+  "welcomeTitle": "হ্যালো, আমি Echo AI",
+  "welcomeSubtitle": "একটি প্রশ্ন করুন, ছবি যুক্ত করুন, অথবা শুরু করতে একটি শেখার প্রম্পট বেছে নিন।",
+  "suggestionPhotosynthesis": "ফটোসিন্থেসিস ব্যাখ্যা করো",
+  "suggestionMath": "গণিতে সাহায্য করো",
+  "suggestionHistory": "ইতিহাসে কুইজ নাও",
+  "suggestionConcept": "একটি ধারণা ব্যাখ্যা করো",
+  "newChat": "নতুন চ্যাট",
+  "starred": "স্টার করা",
+  "projects": "প্রজেক্ট",
+  "recents": "সাম্প্রতিক",
+  "settings": "সেটিংস",
+  "drawerSubtitle": "আরও দ্রুত শিখুন, অনুবাদ করুন এবং অনুসন্ধান করুন।",
+  "noStarredChats": "এখনও কোনো স্টার করা চ্যাট নেই।",
+  "noProjectsYet": "এখনও কোনো প্রজেক্ট নেই।",
+  "noRecentChats": "এখনও কোনো সাম্প্রতিক চ্যাট নেই।",
+  "addProject": "প্রজেক্ট যোগ করুন",
+  "projectName": "প্রজেক্টের নাম",
+  "createProject": "প্রজেক্ট তৈরি করুন",
+  "renameProject": "প্রজেক্টের নাম বদলান",
+  "renameChat": "চ্যাটের নাম বদলান",
+  "rename": "নাম বদলান",
+  "delete": "মুছুন",
+  "cancel": "বাতিল",
+  "save": "সংরক্ষণ করুন",
+  "searchHint": "Echo AI-কে যেকোনো কিছু জিজ্ঞাসা করুন",
+  "imageAttached": "ছবি যুক্ত হয়েছে",
+  "processingImage": "ছবি প্রক্রিয়াকরণ হচ্ছে...",
+  "camera": "ক্যামেরা",
+  "gallery": "গ্যালারি",
+  "send": "পাঠান",
+  "attachmentPermissionDenied": "ছবি যুক্ত করতে অনুমতি দরকার।",
+  "thinking": "Echo AI ভাবছে",
+  "chatNotFound": "চ্যাট সেশন পাওয়া যায়নি।",
+  "copy": "কপি",
+  "speak": "শুনুন",
+  "copiedMessage": "বার্তাটি কপি হয়েছে।",
+  "india": "ভারত",
+  "technology": "প্রযুক্তি",
+  "education": "শিক্ষা",
+  "science": "বিজ্ঞান",
+  "noNewsAvailable": "এই মুহূর্তে কোনো সংবাদ নেই।",
+  "failedToOpenLink": "নিবন্ধটি খোলা যায়নি।",
+  "appLanguage": "অ্যাপের ভাষা",
+  "voiceLanguage": "ভয়েস ভাষা",
+  "theme": "থিম",
+  "light": "লাইট",
+  "dark": "ডার্ক",
+  "system": "সিস্টেম",
+  "fontSize": "ফন্টের আকার",
+  "volume": "ভলিউম",
+  "pitch": "পিচ",
+  "speechRate": "বলার গতি",
+  "clearAllChats": "সব চ্যাট মুছুন",
+  "clearAllChatsConfirm": "এতে সব সংরক্ষিত চ্যাট সেশন স্থায়ীভাবে মুছে যাবে।",
+  "storagePath": "স্টোরেজ পাথ",
+  "storageUnavailable": "স্টোরেজ পাথ পাওয়া যায়নি।",
+  "appVersion": "অ্যাপ সংস্করণ",
+  "english": "ইংরেজি",
+  "hindi": "হিন্দি",
+  "bengali": "বাংলা",
+  "imageQuestionFallback": "গুরুত্বপূর্ণ বিষয়গুলো ব্যাখ্যা করুন।",
+  "imageOnlyPrompt": "এই ছবিটি বুঝতে আমাকে সাহায্য করুন।",
+  "justNow": "এইমাত্র",
+  "minutesAgo": "{count}মি আগে",
+  "@minutesAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hoursAgo": "{count}ঘ আগে",
+  "@hoursAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "daysAgo": "{count}দিন আগে",
+  "@daysAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "retry": "আবার চেষ্টা করুন",
+  "noDescriptionAvailable": "কোনো বর্ণনা পাওয়া যায়নি।",
+  "startNewChat": "নতুন চ্যাট শুরু করুন",
+  "assistantUnavailable": "আমি এখন Echo AI-তে পৌঁছাতে পারছি না। দয়া করে আপনার Groq API key বা সংযোগ পরীক্ষা করে আবার চেষ্টা করুন।"
+}

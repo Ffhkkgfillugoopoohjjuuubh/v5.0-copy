@@ -1,0 +1,9 @@
+-dontwarn com.google.**
+-dontwarn io.flutter.**
+-dontwarn androidx.**
+-keep class com.google.mlkit.** { *; }
+-keep class com.google_mlkit_** { *; }
+-keep class io.flutter.** { *; }
+-keep class androidx.** { *; }
+-keep class com.google.android.gms.** { *; }
+-dontwarn com.google.android.play.core.**

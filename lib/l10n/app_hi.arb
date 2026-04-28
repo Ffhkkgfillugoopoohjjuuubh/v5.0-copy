@@ -1,0 +1,97 @@
+{
+  "@@locale": "hi",
+  "appName": "Echo AI",
+  "chatTab": "चैट",
+  "newsTab": "समाचार",
+  "welcomeTitle": "नमस्ते, मैं Echo AI हूँ",
+  "welcomeSubtitle": "कोई सवाल पूछें, एक चित्र जोड़ें, या शुरुआत के लिए सीखने वाला संकेत चुनें।",
+  "suggestionPhotosynthesis": "प्रकाश संश्लेषण समझाओ",
+  "suggestionMath": "गणित में मदद करो",
+  "suggestionHistory": "इतिहास पर क्विज़ लो",
+  "suggestionConcept": "एक अवधारणा समझाओ",
+  "newChat": "नई चैट",
+  "starred": "स्टार किए गए",
+  "projects": "प्रोजेक्ट्स",
+  "recents": "हाल के",
+  "settings": "सेटिंग्स",
+  "drawerSubtitle": "तेज़ी से सीखें, अनुवाद करें और खोजें।",
+  "noStarredChats": "अभी कोई स्टार की गई चैट नहीं है।",
+  "noProjectsYet": "अभी कोई प्रोजेक्ट नहीं है।",
+  "noRecentChats": "अभी कोई हाल की चैट नहीं है।",
+  "addProject": "प्रोजेक्ट जोड़ें",
+  "projectName": "प्रोजेक्ट का नाम",
+  "createProject": "प्रोजेक्ट बनाएं",
+  "renameProject": "प्रोजेक्ट का नाम बदलें",
+  "renameChat": "चैट का नाम बदलें",
+  "rename": "नाम बदलें",
+  "delete": "हटाएं",
+  "cancel": "रद्द करें",
+  "save": "सहेजें",
+  "searchHint": "Echo AI से कुछ भी पूछें",
+  "imageAttached": "चित्र जुड़ा हुआ है",
+  "processingImage": "चित्र प्रोसेस हो रहा है...",
+  "camera": "कैमरा",
+  "gallery": "गैलरी",
+  "send": "भेजें",
+  "attachmentPermissionDenied": "चित्र जोड़ने के लिए अनुमति चाहिए।",
+  "thinking": "Echo AI सोच रहा है",
+  "chatNotFound": "चैट सत्र नहीं मिला।",
+  "copy": "कॉपी",
+  "speak": "सुनें",
+  "copiedMessage": "संदेश कॉपी हो गया।",
+  "india": "भारत",
+  "technology": "तकनीक",
+  "education": "शिक्षा",
+  "science": "विज्ञान",
+  "noNewsAvailable": "अभी कोई समाचार उपलब्ध नहीं है।",
+  "failedToOpenLink": "लेख नहीं खुल सका।",
+  "appLanguage": "ऐप भाषा",
+  "voiceLanguage": "आवाज़ की भाषा",
+  "theme": "थीम",
+  "light": "लाइट",
+  "dark": "डार्क",
+  "system": "सिस्टम",
+  "fontSize": "फ़ॉन्ट आकार",
+  "volume": "आवाज़",
+  "pitch": "पिच",
+  "speechRate": "बोलने की गति",
+  "clearAllChats": "सभी चैट साफ करें",
+  "clearAllChatsConfirm": "इससे सभी सहेजे गए चैट सत्र स्थायी रूप से हट जाएंगे।",
+  "storagePath": "स्टोरेज पाथ",
+  "storageUnavailable": "स्टोरेज पाथ उपलब्ध नहीं है।",
+  "appVersion": "ऐप संस्करण",
+  "english": "अंग्रेज़ी",
+  "hindi": "हिंदी",
+  "bengali": "बंगाली",
+  "imageQuestionFallback": "कृपया महत्वपूर्ण विवरण समझाएं।",
+  "imageOnlyPrompt": "इस चित्र को समझने में मेरी मदद करें।",
+  "justNow": "अभी अभी",
+  "minutesAgo": "{count}मि पहले",
+  "@minutesAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hoursAgo": "{count}घं पहले",
+  "@hoursAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "daysAgo": "{count}दि पहले",
+  "@daysAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "retry": "फिर से कोशिश करें",
+  "noDescriptionAvailable": "कोई विवरण उपलब्ध नहीं है।",
+  "startNewChat": "नई चैट शुरू करें",
+  "assistantUnavailable": "मैं अभी Echo AI तक नहीं पहुँच सका। कृपया अपनी Groq API key या कनेक्शन जांचें और फिर कोशिश करें।"
+}

@@ -1,0 +1,97 @@
+{
+  "@@locale": "en",
+  "appName": "Echo AI",
+  "chatTab": "Chat",
+  "newsTab": "News",
+  "welcomeTitle": "Hello, I'm Echo AI",
+  "welcomeSubtitle": "Ask a question, attach an image, or pick a learning prompt to get started.",
+  "suggestionPhotosynthesis": "Explain photosynthesis",
+  "suggestionMath": "Help with math",
+  "suggestionHistory": "Quiz me on history",
+  "suggestionConcept": "Explain a concept",
+  "newChat": "New Chat",
+  "starred": "Starred",
+  "projects": "Projects",
+  "recents": "Recents",
+  "settings": "Settings",
+  "drawerSubtitle": "Learn, translate, and explore faster.",
+  "noStarredChats": "No starred chats yet.",
+  "noProjectsYet": "No projects yet.",
+  "noRecentChats": "No recent chats yet.",
+  "addProject": "Add project",
+  "projectName": "Project name",
+  "createProject": "Create project",
+  "renameProject": "Rename project",
+  "renameChat": "Rename chat",
+  "rename": "Rename",
+  "delete": "Delete",
+  "cancel": "Cancel",
+  "save": "Save",
+  "searchHint": "Ask Echo AI anything",
+  "imageAttached": "Image attached",
+  "processingImage": "Processing image...",
+  "camera": "Camera",
+  "gallery": "Gallery",
+  "send": "Send",
+  "attachmentPermissionDenied": "Permission is needed to attach an image.",
+  "thinking": "Echo AI is thinking",
+  "chatNotFound": "Chat session not found.",
+  "copy": "Copy",
+  "speak": "Speak",
+  "copiedMessage": "Message copied.",
+  "india": "India",
+  "technology": "Technology",
+  "education": "Education",
+  "science": "Science",
+  "noNewsAvailable": "No news available right now.",
+  "failedToOpenLink": "Couldn't open that article.",
+  "appLanguage": "App language",
+  "voiceLanguage": "Voice language",
+  "theme": "Theme",
+  "light": "Light",
+  "dark": "Dark",
+  "system": "System",
+  "fontSize": "Font size",
+  "volume": "Volume",
+  "pitch": "Pitch",
+  "speechRate": "Speech rate",
+  "clearAllChats": "Clear all chats",
+  "clearAllChatsConfirm": "This will permanently remove every saved chat session.",
+  "storagePath": "Storage path",
+  "storageUnavailable": "Storage path unavailable.",
+  "appVersion": "App version",
+  "english": "English",
+  "hindi": "Hindi",
+  "bengali": "Bengali",
+  "imageQuestionFallback": "Please explain the important details.",
+  "imageOnlyPrompt": "Help me understand this image.",
+  "justNow": "Just now",
+  "minutesAgo": "{count}m ago",
+  "@minutesAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hoursAgo": "{count}h ago",
+  "@hoursAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "daysAgo": "{count}d ago",
+  "@daysAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "retry": "Retry",
+  "noDescriptionAvailable": "No description available.",
+  "startNewChat": "Start a new chat",
+  "assistantUnavailable": "I couldn't reach Echo AI right now. Please check your Groq API key or connection and try again."
+}
