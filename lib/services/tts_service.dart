@@ -81,13 +81,18 @@ class TtsService {
   final ApiService _apiService = ApiService();
   final StreamController<bool> _speakingController =
       StreamController<bool>.broadcast();
+  final StreamController<bool> _translatingController =
+      StreamController<bool>.broadcast();
 
   bool _initialized = false;
   bool _isSpeaking = false;
+  bool _isTranslating = false;
   bool _stopRequested = false;
 
   bool get isSpeaking => _isSpeaking;
+  bool get isTranslating => _isTranslating;
   Stream<bool> get speakingStream => _speakingController.stream;
+  Stream<bool> get translatingStream => _translatingController.stream;
 
   Future<void> init() => initialize();
 
@@ -127,19 +132,21 @@ class TtsService {
     final isEnglish = locale.toLowerCase().startsWith('en');
 
     if (!isEnglish) {
+      _setTranslating(true);
       preparedText = await _apiService.translateText(preparedText, locale);
+      _setTranslating(false);
     }
 
     final useAsianVoiceSettings = _usesAsianVoiceSettings(locale);
     await _flutterTts.setLanguage(locale);
     await _flutterTts.setVolume((volume ?? 1.0).clamp(0.0, 1.0).toDouble());
     await _flutterTts.setPitch(
-      (pitch ?? (useAsianVoiceSettings ? 1.2 : 1.15))
+      (pitch ?? _getPitchForLocale(locale))
           .clamp(0.5, 2.0)
           .toDouble(),
     );
     await _flutterTts.setSpeechRate(
-      (speechRate ?? (useAsianVoiceSettings ? 0.40 : 0.42))
+      (speechRate ?? _getRateForLocale(locale))
           .clamp(0.1, 1.0)
           .toDouble(),
     );
@@ -242,5 +249,35 @@ class TtsService {
     if (!_speakingController.isClosed) {
       _speakingController.add(value);
     }
+  }
+
+  void _setTranslating(bool value) {
+    if (_isTranslating == value) {
+      return;
+    }
+    _isTranslating = value;
+    if (!_translatingController.isClosed) {
+      _translatingController.add(value);
+    }
+  }
+
+  double _getPitchForLocale(String locale) {
+    if (locale.toLowerCase().startsWith('en')) {
+      return 1.05;
+    }
+    if (_usesAsianVoiceSettings(locale)) {
+      return 1.1;
+    }
+    return 1.1;
+  }
+
+  double _getRateForLocale(String locale) {
+    if (locale.toLowerCase().startsWith('en')) {
+      return 0.48;
+    }
+    if (_usesAsianVoiceSettings(locale)) {
+      return 0.45;
+    }
+    return 0.46;
   }
 }

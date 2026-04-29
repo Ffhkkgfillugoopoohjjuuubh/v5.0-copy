@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../models/chat_session.dart';
+import '../models/note_model.dart';
 import '../models/project_model.dart';
 
 final storageServiceProvider = Provider<StorageService>(
@@ -14,6 +15,7 @@ final storageServiceProvider = Provider<StorageService>(
 class StorageService {
   static const String _sessionsPrefix = 'session_';
   static const String _projectsFileName = 'projects.json';
+  static const String _notesFileName = 'notes.json';
 
   Future<List<ChatSession>> loadAllSessions() async {
     try {
@@ -113,6 +115,32 @@ class StorageService {
     );
   }
 
+  Future<List<Note>> loadNotes() async {
+    try {
+      final file = await _notesFile();
+      if (!await file.exists()) {
+        return <Note>[];
+      }
+
+      final contents = await file.readAsString();
+      final list = jsonDecode(contents) as List<dynamic>;
+      final notes = list
+          .map((item) => Note.fromJson(item as Map<String, dynamic>))
+          .toList();
+      notes.sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
+      return notes;
+    } catch (_) {
+      return <Note>[];
+    }
+  }
+
+  Future<void> saveNotes(List<Note> notes) async {
+    final file = await _notesFile();
+    await file.writeAsString(
+      jsonEncode(notes.map((item) => item.toJson()).toList()),
+    );
+  }
+
   Future<String> getStoragePath() async {
     final directory = await _storageDirectory();
     return directory.path;
@@ -134,6 +162,11 @@ class StorageService {
   Future<File> _projectsFile() async {
     final directory = await _storageDirectory();
     return File('${directory.path}${Platform.pathSeparator}$_projectsFileName');
+  }
+
+  Future<File> _notesFile() async {
+    final directory = await _storageDirectory();
+    return File('${directory.path}${Platform.pathSeparator}$_notesFileName');
   }
 
   String _fileName(String path) {

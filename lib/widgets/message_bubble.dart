@@ -9,7 +9,10 @@ import 'package:intl/intl.dart';
 import 'package:markdown/markdown.dart' as md;
 
 import '../models/chat_message.dart';
+import '../models/note_model.dart';
 import '../providers/settings_provider.dart';
+import '../providers/notes_provider.dart';
+import '../services/note_categorizer.dart';
 import '../services/tts_service.dart';
 
 class MessageBubble extends ConsumerStatefulWidget {
@@ -221,6 +224,13 @@ class _MessageBubbleState extends ConsumerState<MessageBubble> {
                               : Icons.volume_up_rounded,
                         ),
                 ),
+                IconButton(
+                  tooltip: 'Add to Notebook',
+                  visualDensity: VisualDensity.compact,
+                  iconSize: 18,
+                  onPressed: () => _addToNotebook(context),
+                  icon: const Icon(Icons.note_add_outlined),
+                ),
               ],
             ),
           ],
@@ -264,6 +274,33 @@ class _MessageBubbleState extends ConsumerState<MessageBubble> {
     }
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(l10n.copiedMessage)),
+    );
+  }
+
+  Future<void> _addToNotebook(BuildContext context) async {
+    final content = widget.message.content;
+    final title = content.length > 30
+        ? '${content.substring(0, 30)}...'
+        : content;
+    final subject = NoteCategorizer.detectSubject(content);
+
+    final note = Note(
+      id: '',
+      title: title,
+      content: content,
+      subject: subject,
+      topic: '',
+      createdAt: DateTime(0),
+      updatedAt: DateTime(0),
+    );
+
+    await ref.read(notesProvider.notifier).addNote(note);
+
+    if (!context.mounted) {
+      return;
+    }
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Added to Notebook')),
     );
   }
 }
