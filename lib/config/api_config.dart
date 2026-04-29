@@ -1,7 +1,4 @@
-const String deepseekApiKey = String.fromEnvironment(
-  'DEEPSEEK_API_KEY',
-  defaultValue: 'DEEPSEEK_API_KEY_HERE',
-);
+const String deepseekApiKey = 'sk-21e643e2e8574953926c9d3c6c7d47f9';
 
 const String baseUrl = 'https://api.deepseek.com/v1';
 const String aiModel = 'deepseek-chat';
