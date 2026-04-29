@@ -4,9 +4,9 @@ import 'app_localizations.dart';
 
 // ignore_for_file: type=lint
 
-/// The translations for Bengali Bangla (`bn`).
-class AppLocalizationsBn extends AppLocalizations {
-  AppLocalizationsBn([String locale = 'bn']) : super(locale);
+/// The translations for Malayalam (`ml`).
+class AppLocalizationsMl extends AppLocalizations {
+  AppLocalizationsMl([String locale = 'ml']) : super(locale);
 
   @override
   String get appTitle => 'Echo AI';

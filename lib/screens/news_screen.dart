@@ -1,5 +1,6 @@
 import 'package:ai_tutor/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -178,7 +179,11 @@ class NewsScreen extends ConsumerWidget {
                 ),
               );
             },
-            loading: () => const Center(child: CircularProgressIndicator()),
+            loading: () => ListView.builder(
+              padding: const EdgeInsets.all(16),
+              itemCount: 6,
+              itemBuilder: (context, index) => const _NewsSkeleton(),
+            ),
           ),
         ),
       ],
@@ -219,5 +224,43 @@ class NewsScreen extends ConsumerWidget {
       return l10n.hoursAgo(difference.inHours);
     }
     return l10n.daysAgo(difference.inDays);
+  }
+}
+
+class _NewsSkeleton extends StatelessWidget {
+  const _NewsSkeleton();
+
+  @override
+  Widget build(BuildContext context) {
+    final baseColor = Theme.of(context).colorScheme.surfaceContainerHighest;
+
+    Widget bar(double width, double height) {
+      return Container(
+        width: width,
+        height: height,
+        decoration: BoxDecoration(
+          color: baseColor,
+          borderRadius: BorderRadius.circular(6),
+        ),
+      );
+    }
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 14),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          bar(double.infinity, 18),
+          const SizedBox(height: 10),
+          bar(double.infinity, 12),
+          const SizedBox(height: 8),
+          bar(MediaQuery.sizeOf(context).width * 0.62, 12),
+          const SizedBox(height: 12),
+          bar(90, 10),
+        ],
+      )
+          .animate(onPlay: (controller) => controller.repeat())
+          .shimmer(duration: 1200.ms, color: Colors.white.withValues(alpha: 0.22)),
+    );
   }
 }

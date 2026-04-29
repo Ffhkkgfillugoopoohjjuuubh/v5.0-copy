@@ -4,16 +4,19 @@ import 'package:ai_tutor/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
+
 import '../services/ocr_service.dart';
 
 class ChatInputWidget extends StatefulWidget {
   const ChatInputWidget({
     super.key,
     required this.onSend,
+    this.onFocusChanged,
     this.isLoading = false,
   });
 
   final Future<void> Function(String text, String? extractedOcrText) onSend;
+  final ValueChanged<bool>? onFocusChanged;
   final bool isLoading;
 
   @override
@@ -31,41 +34,25 @@ class _ChatInputWidgetState extends State<ChatInputWidget> {
   bool _isProcessingImage = false;
 
   @override
+  void initState() {
+    super.initState();
+    _focusNode.addListener(_handleFocusChanged);
+  }
+
+  @override
   void dispose() {
+    _focusNode.removeListener(_handleFocusChanged);
     _controller.dispose();
     _focusNode.dispose();
     super.dispose();
   }
 
-  Future<void> _pickImage() async {
+  void _handleFocusChanged() {
+    widget.onFocusChanged?.call(_focusNode.hasFocus);
+  }
+
+  Future<void> _pickImage(ImageSource source) async {
     final l10n = AppLocalizations.of(context)!;
-    final source = await showModalBottomSheet<ImageSource>(
-      context: context,
-      builder: (context) {
-        return SafeArea(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              ListTile(
-                leading: const Icon(Icons.photo_camera_outlined),
-                title: Text(l10n.camera),
-                onTap: () => Navigator.of(context).pop(ImageSource.camera),
-              ),
-              ListTile(
-                leading: const Icon(Icons.photo_library_outlined),
-                title: Text(l10n.gallery),
-                onTap: () => Navigator.of(context).pop(ImageSource.gallery),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-
-    if (source == null) {
-      return;
-    }
-
     final permissionGranted = await _requestPermission(source);
     if (!permissionGranted) {
       if (!mounted) {
@@ -125,7 +112,9 @@ class _ChatInputWidgetState extends State<ChatInputWidget> {
     final text = _controller.text.trim();
     final ocrText = _ocrText?.trim();
 
-    if (text.isEmpty && (ocrText == null || ocrText.isEmpty)) {
+    if (widget.isLoading ||
+        _isProcessingImage ||
+        (text.isEmpty && (ocrText == null || ocrText.isEmpty))) {
       return;
     }
 
@@ -147,6 +136,7 @@ class _ChatInputWidgetState extends State<ChatInputWidget> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
+    final disabled = widget.isLoading || _isProcessingImage;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -155,6 +145,13 @@ class _ChatInputWidgetState extends State<ChatInputWidget> {
           Padding(
             padding: const EdgeInsets.only(bottom: 8),
             child: InputChip(
+              avatar: _isProcessingImage
+                  ? const SizedBox(
+                      width: 14,
+                      height: 14,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : const Icon(Icons.image_outlined, size: 18),
               label: Text(
                 _isProcessingImage ? l10n.processingImage : l10n.imageAttached,
               ),
@@ -166,51 +163,75 @@ class _ChatInputWidgetState extends State<ChatInputWidget> {
                         _ocrText = null;
                       });
                     },
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
-              ),
             ),
           ),
         DecoratedBox(
           decoration: BoxDecoration(
             color: theme.colorScheme.surface,
-            borderRadius: BorderRadius.circular(24),
-          ),
-          child: Row(
-            children: <Widget>[
-              IconButton(
-                onPressed:
-                    widget.isLoading || _isProcessingImage ? null : _pickImage,
-                icon: const Icon(Icons.attach_file_rounded),
-              ),
-              Expanded(
-                child: TextField(
-                  controller: _controller,
-                  focusNode: _focusNode,
-                  minLines: 1,
-                  maxLines: 5,
-                  textInputAction: TextInputAction.send,
-                  onSubmitted: (_) => _send(),
-                  decoration: InputDecoration(
-                    hintText: l10n.searchHint,
-                    border: InputBorder.none,
-                    enabledBorder: InputBorder.none,
-                    focusedBorder: InputBorder.none,
-                    contentPadding: const EdgeInsets.symmetric(vertical: 16),
-                  ),
-                ),
-              ),
-              IconButton(
-                onPressed: widget.isLoading || _isProcessingImage ? null : _send,
-                icon: widget.isLoading
-                    ? const SizedBox(
-                        width: 18,
-                        height: 18,
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      )
-                    : const Icon(Icons.send_rounded),
+            borderRadius: BorderRadius.circular(28),
+            boxShadow: <BoxShadow>[
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.10),
+                blurRadius: 20,
+                offset: const Offset(0, 8),
               ),
             ],
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
+            child: Row(
+              children: <Widget>[
+                IconButton(
+                  tooltip: l10n.camera,
+                  onPressed:
+                      disabled ? null : () => _pickImage(ImageSource.camera),
+                  icon: const Icon(Icons.photo_camera_outlined),
+                ),
+                IconButton(
+                  tooltip: l10n.gallery,
+                  onPressed:
+                      disabled ? null : () => _pickImage(ImageSource.gallery),
+                  icon: const Icon(Icons.photo_library_outlined),
+                ),
+                Expanded(
+                  child: TextField(
+                    controller: _controller,
+                    focusNode: _focusNode,
+                    minLines: 1,
+                    maxLines: 5,
+                    textInputAction: TextInputAction.send,
+                    onSubmitted: (_) => _send(),
+                    decoration: InputDecoration(
+                      hintText: l10n.typeMessage,
+                      border: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                      focusedBorder: InputBorder.none,
+                      contentPadding:
+                          const EdgeInsets.symmetric(vertical: 14),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 4),
+                FilledButton(
+                  onPressed: disabled ? null : _send,
+                  style: FilledButton.styleFrom(
+                    shape: const CircleBorder(),
+                    padding: const EdgeInsets.all(14),
+                    backgroundColor: const Color(0xFF8B5CF6),
+                  ),
+                  child: widget.isLoading
+                      ? const SizedBox(
+                          width: 18,
+                          height: 18,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: Colors.white,
+                          ),
+                        )
+                      : const Icon(Icons.arrow_upward_rounded),
+                ),
+              ],
+            ),
           ),
         ),
       ],

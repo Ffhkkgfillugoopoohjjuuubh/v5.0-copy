@@ -6,8 +6,20 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart' as intl;
 
 import 'app_localizations_bn.dart';
+import 'app_localizations_de.dart';
 import 'app_localizations_en.dart';
+import 'app_localizations_es.dart';
+import 'app_localizations_fr.dart';
+import 'app_localizations_gu.dart';
 import 'app_localizations_hi.dart';
+import 'app_localizations_ja.dart';
+import 'app_localizations_kn.dart';
+import 'app_localizations_ko.dart';
+import 'app_localizations_ml.dart';
+import 'app_localizations_mr.dart';
+import 'app_localizations_pa.dart';
+import 'app_localizations_ta.dart';
+import 'app_localizations_te.dart';
 
 // ignore_for_file: type=lint
 
@@ -63,15 +75,17 @@ import 'app_localizations_hi.dart';
 /// be consistent with the languages listed in the AppLocalizations.supportedLocales
 /// property.
 abstract class AppLocalizations {
-  AppLocalizations(String locale) : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+  AppLocalizations(String locale)
+    : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
-  static AppLocalizations? of(BuildContext context) {
-    return Localizations.of<AppLocalizations>(context, AppLocalizations);
+  static AppLocalizations of(BuildContext context) {
+    return Localizations.of<AppLocalizations>(context, AppLocalizations)!;
   }
 
-  static const LocalizationsDelegate<AppLocalizations> delegate = _AppLocalizationsDelegate();
+  static const LocalizationsDelegate<AppLocalizations> delegate =
+      _AppLocalizationsDelegate();
 
   /// A list of this localizations delegate along with the default localizations
   /// delegates.
@@ -83,19 +97,38 @@ abstract class AppLocalizations {
   /// Additional delegates can be added by appending to this list in
   /// MaterialApp. This list does not have to be used at all if a custom list
   /// of delegates is preferred or required.
-  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates = <LocalizationsDelegate<dynamic>>[
-    delegate,
-    GlobalMaterialLocalizations.delegate,
-    GlobalCupertinoLocalizations.delegate,
-    GlobalWidgetsLocalizations.delegate,
-  ];
+  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
+      <LocalizationsDelegate<dynamic>>[
+        delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ];
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
     Locale('bn'),
+    Locale('de'),
     Locale('en'),
-    Locale('hi')
+    Locale('es'),
+    Locale('fr'),
+    Locale('gu'),
+    Locale('hi'),
+    Locale('ja'),
+    Locale('kn'),
+    Locale('ko'),
+    Locale('ml'),
+    Locale('mr'),
+    Locale('pa'),
+    Locale('ta'),
+    Locale('te'),
   ];
+
+  /// No description provided for @appTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Echo AI'**
+  String get appTitle;
 
   /// No description provided for @appName.
   ///
@@ -115,16 +148,28 @@ abstract class AppLocalizations {
   /// **'News'**
   String get newsTab;
 
+  /// No description provided for @greeting.
+  ///
+  /// In en, this message translates to:
+  /// **'Hello! I am Echo AI'**
+  String get greeting;
+
+  /// No description provided for @greetingSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your personal AI teacher'**
+  String get greetingSubtitle;
+
   /// No description provided for @welcomeTitle.
   ///
   /// In en, this message translates to:
-  /// **'Hello, I\'m Echo AI'**
+  /// **'Hello! I am Echo AI'**
   String get welcomeTitle;
 
   /// No description provided for @welcomeSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Ask a question, attach an image, or pick a learning prompt to get started.'**
+  /// **'Your personal AI teacher'**
   String get welcomeSubtitle;
 
   /// No description provided for @suggestionPhotosynthesis.
@@ -136,7 +181,7 @@ abstract class AppLocalizations {
   /// No description provided for @suggestionMath.
   ///
   /// In en, this message translates to:
-  /// **'Help with math'**
+  /// **'Help me with math'**
   String get suggestionMath;
 
   /// No description provided for @suggestionHistory.
@@ -145,10 +190,16 @@ abstract class AppLocalizations {
   /// **'Quiz me on history'**
   String get suggestionHistory;
 
+  /// No description provided for @suggestionGravity.
+  ///
+  /// In en, this message translates to:
+  /// **'Explain gravity'**
+  String get suggestionGravity;
+
   /// No description provided for @suggestionConcept.
   ///
   /// In en, this message translates to:
-  /// **'Explain a concept'**
+  /// **'Explain gravity'**
   String get suggestionConcept;
 
   /// No description provided for @newChat.
@@ -184,7 +235,7 @@ abstract class AppLocalizations {
   /// No description provided for @drawerSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Learn, translate, and explore faster.'**
+  /// **'Your personal AI teacher'**
   String get drawerSubtitle;
 
   /// No description provided for @noStarredChats.
@@ -202,7 +253,7 @@ abstract class AppLocalizations {
   /// No description provided for @noRecentChats.
   ///
   /// In en, this message translates to:
-  /// **'No recent chats yet.'**
+  /// **'No recent sessions yet.'**
   String get noRecentChats;
 
   /// No description provided for @addProject.
@@ -253,17 +304,65 @@ abstract class AppLocalizations {
   /// **'Cancel'**
   String get cancel;
 
+  /// No description provided for @confirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm'**
+  String get confirm;
+
   /// No description provided for @save.
   ///
   /// In en, this message translates to:
   /// **'Save'**
   String get save;
 
+  /// No description provided for @share.
+  ///
+  /// In en, this message translates to:
+  /// **'Share'**
+  String get share;
+
+  /// No description provided for @star.
+  ///
+  /// In en, this message translates to:
+  /// **'Star'**
+  String get star;
+
+  /// No description provided for @unstar.
+  ///
+  /// In en, this message translates to:
+  /// **'Unstar'**
+  String get unstar;
+
+  /// No description provided for @addToProject.
+  ///
+  /// In en, this message translates to:
+  /// **'Add to project'**
+  String get addToProject;
+
+  /// No description provided for @noProject.
+  ///
+  /// In en, this message translates to:
+  /// **'No project'**
+  String get noProject;
+
+  /// No description provided for @typeMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask anything...'**
+  String get typeMessage;
+
   /// No description provided for @searchHint.
   ///
   /// In en, this message translates to:
-  /// **'Ask Echo AI anything'**
+  /// **'Ask anything...'**
   String get searchHint;
+
+  /// No description provided for @attachImage.
+  ///
+  /// In en, this message translates to:
+  /// **'Attach image'**
+  String get attachImage;
 
   /// No description provided for @imageAttached.
   ///
@@ -304,7 +403,7 @@ abstract class AppLocalizations {
   /// No description provided for @thinking.
   ///
   /// In en, this message translates to:
-  /// **'Echo AI is thinking'**
+  /// **'Thinking...'**
   String get thinking;
 
   /// No description provided for @chatNotFound.
@@ -325,11 +424,23 @@ abstract class AppLocalizations {
   /// **'Speak'**
   String get speak;
 
+  /// No description provided for @stop.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop'**
+  String get stop;
+
   /// No description provided for @copiedMessage.
   ///
   /// In en, this message translates to:
-  /// **'Message copied.'**
+  /// **'Copied to clipboard.'**
   String get copiedMessage;
+
+  /// No description provided for @confirmDeleteChat.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this chat permanently?'**
+  String get confirmDeleteChat;
 
   /// No description provided for @india.
   ///
@@ -379,6 +490,18 @@ abstract class AppLocalizations {
   /// **'Voice language'**
   String get voiceLanguage;
 
+  /// No description provided for @voice.
+  ///
+  /// In en, this message translates to:
+  /// **'Voice'**
+  String get voice;
+
+  /// No description provided for @appearance.
+  ///
+  /// In en, this message translates to:
+  /// **'Appearance'**
+  String get appearance;
+
   /// No description provided for @theme.
   ///
   /// In en, this message translates to:
@@ -402,6 +525,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'System'**
   String get system;
+
+  /// No description provided for @lightMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Light'**
+  String get lightMode;
+
+  /// No description provided for @darkMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark'**
+  String get darkMode;
+
+  /// No description provided for @systemDefault.
+  ///
+  /// In en, this message translates to:
+  /// **'System'**
+  String get systemDefault;
 
   /// No description provided for @fontSize.
   ///
@@ -427,6 +568,12 @@ abstract class AppLocalizations {
   /// **'Speech rate'**
   String get speechRate;
 
+  /// No description provided for @data.
+  ///
+  /// In en, this message translates to:
+  /// **'Data'**
+  String get data;
+
   /// No description provided for @clearAllChats.
   ///
   /// In en, this message translates to:
@@ -439,11 +586,23 @@ abstract class AppLocalizations {
   /// **'This will permanently remove every saved chat session.'**
   String get clearAllChatsConfirm;
 
+  /// No description provided for @confirmClear.
+  ///
+  /// In en, this message translates to:
+  /// **'This will permanently remove every saved chat session.'**
+  String get confirmClear;
+
   /// No description provided for @storagePath.
   ///
   /// In en, this message translates to:
   /// **'Storage path'**
   String get storagePath;
+
+  /// No description provided for @storageLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Storage location'**
+  String get storageLocation;
 
   /// No description provided for @storageUnavailable.
   ///
@@ -451,11 +610,23 @@ abstract class AppLocalizations {
   /// **'Storage path unavailable.'**
   String get storageUnavailable;
 
+  /// No description provided for @about.
+  ///
+  /// In en, this message translates to:
+  /// **'About'**
+  String get about;
+
   /// No description provided for @appVersion.
   ///
   /// In en, this message translates to:
   /// **'App version'**
   String get appVersion;
+
+  /// No description provided for @developerInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Developer info'**
+  String get developerInfo;
 
   /// No description provided for @english.
   ///
@@ -536,7 +707,8 @@ abstract class AppLocalizations {
   String get assistantUnavailable;
 }
 
-class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
+class _AppLocalizationsDelegate
+    extends LocalizationsDelegate<AppLocalizations> {
   const _AppLocalizationsDelegate();
 
   @override
@@ -545,26 +717,67 @@ class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> 
   }
 
   @override
-  bool isSupported(Locale locale) => <String>['bn', 'en', 'hi'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>[
+    'bn',
+    'de',
+    'en',
+    'es',
+    'fr',
+    'gu',
+    'hi',
+    'ja',
+    'kn',
+    'ko',
+    'ml',
+    'mr',
+    'pa',
+    'ta',
+    'te',
+  ].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
 }
 
 AppLocalizations lookupAppLocalizations(Locale locale) {
-
-
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
-    case 'bn': return AppLocalizationsBn();
-    case 'en': return AppLocalizationsEn();
-    case 'hi': return AppLocalizationsHi();
+    case 'bn':
+      return AppLocalizationsBn();
+    case 'de':
+      return AppLocalizationsDe();
+    case 'en':
+      return AppLocalizationsEn();
+    case 'es':
+      return AppLocalizationsEs();
+    case 'fr':
+      return AppLocalizationsFr();
+    case 'gu':
+      return AppLocalizationsGu();
+    case 'hi':
+      return AppLocalizationsHi();
+    case 'ja':
+      return AppLocalizationsJa();
+    case 'kn':
+      return AppLocalizationsKn();
+    case 'ko':
+      return AppLocalizationsKo();
+    case 'ml':
+      return AppLocalizationsMl();
+    case 'mr':
+      return AppLocalizationsMr();
+    case 'pa':
+      return AppLocalizationsPa();
+    case 'ta':
+      return AppLocalizationsTa();
+    case 'te':
+      return AppLocalizationsTe();
   }
 
   throw FlutterError(
     'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
     'an issue with the localizations generation tool. Please file an issue '
     'on GitHub with a reproducible sample app and the gen-l10n configuration '
-    'that was used.'
+    'that was used.',
   );
 }

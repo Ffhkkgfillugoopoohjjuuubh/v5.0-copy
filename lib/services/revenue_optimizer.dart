@@ -1,11 +1,33 @@
 import 'dart:async';
 
 class RevenueOptimizer {
-  final StreamController<void> _adRefreshController =
-      StreamController<void>.broadcast();
-  final List<Timer> _timers = <Timer>[];
+  static const Duration _targetAdWindow = Duration(seconds: 30);
 
-  Stream<void> get adRefreshStream => _adRefreshController.stream;
+  final StreamController<bool> _adRefreshController =
+      StreamController<bool>.broadcast();
+
+  Timer? _adTimer;
+  Timer? _wordTimer;
+  DateTime? _deadline;
+  Duration _remaining = _targetAdWindow;
+  bool _timerElapsed = false;
+  bool _wordsComplete = true;
+  bool _isPaused = false;
+
+  Stream<bool> get adRefreshSignal => _adRefreshController.stream;
+  Stream<bool> get adRefreshStream => adRefreshSignal;
+
+  void startSession(int wordCount) {
+    _adTimer?.cancel();
+    _wordTimer?.cancel();
+    _wordTimer = null;
+    _timerElapsed = false;
+    _wordsComplete = false;
+    _remaining = _targetAdWindow;
+    _isPaused = false;
+    _emitRefresh();
+    _startAdTimer(_targetAdWindow);
+  }
 
   Stream<String> streamWords(String text) {
     final words = text
@@ -15,6 +37,10 @@ class RevenueOptimizer {
         .toList();
     final controller = StreamController<String>();
 
+    _wordTimer?.cancel();
+    _wordsComplete = words.isEmpty;
+    _maybeEmitFinalRefresh();
+
     if (words.isEmpty) {
       controller.close();
       return controller.stream;
@@ -23,20 +49,16 @@ class RevenueOptimizer {
     final intervalMilliseconds = wordIntervalMilliseconds(words.length);
     var index = 0;
 
-    late final Timer adTimer;
-    adTimer = Timer(const Duration(seconds: 30), () {
-      _adRefreshController.add(null);
-      _timers.remove(adTimer);
-    });
-    _timers.add(adTimer);
-
-    late final Timer wordTimer;
-    wordTimer = Timer.periodic(
+    _wordTimer = Timer.periodic(
       Duration(milliseconds: intervalMilliseconds),
       (timer) {
         if (index >= words.length) {
           timer.cancel();
-          _timers.remove(wordTimer);
+          if (_wordTimer == timer) {
+            _wordTimer = null;
+          }
+          _wordsComplete = true;
+          _maybeEmitFinalRefresh();
           controller.close();
           return;
         }
@@ -46,14 +68,40 @@ class RevenueOptimizer {
       },
     );
 
-    _timers.add(wordTimer);
-
     controller.onCancel = () {
-      wordTimer.cancel();
-      _timers.remove(wordTimer);
+      _wordTimer?.cancel();
+      _wordTimer = null;
+      _wordsComplete = true;
+      _maybeEmitFinalRefresh();
     };
 
     return controller.stream;
+  }
+
+  void pauseTimer() {
+    if (_isPaused || _adTimer == null || _timerElapsed) {
+      return;
+    }
+
+    final deadline = _deadline;
+    if (deadline != null) {
+      _remaining = deadline.difference(DateTime.now());
+      if (_remaining.isNegative) {
+        _remaining = Duration.zero;
+      }
+    }
+    _adTimer?.cancel();
+    _adTimer = null;
+    _isPaused = true;
+  }
+
+  void resumeTimer() {
+    if (!_isPaused || _timerElapsed) {
+      return;
+    }
+
+    _isPaused = false;
+    _startAdTimer(_remaining);
   }
 
   Duration estimatedDuration(String text) {
@@ -69,16 +117,46 @@ class RevenueOptimizer {
 
   int wordIntervalMilliseconds(int wordCount) {
     if (wordCount <= 0) {
-      return 30;
+      return 40;
     }
-    return (30000 / wordCount).clamp(30, 180).round();
+    return (30000 / wordCount).clamp(40, 200).round();
   }
 
   void dispose() {
-    for (final timer in _timers) {
-      timer.cancel();
-    }
-    _timers.clear();
+    _adTimer?.cancel();
+    _wordTimer?.cancel();
     _adRefreshController.close();
+  }
+
+  void _startAdTimer(Duration duration) {
+    _adTimer?.cancel();
+    if (duration <= Duration.zero) {
+      _handleTimerElapsed();
+      return;
+    }
+
+    _deadline = DateTime.now().add(duration);
+    _adTimer = Timer(duration, _handleTimerElapsed);
+  }
+
+  void _handleTimerElapsed() {
+    _adTimer?.cancel();
+    _adTimer = null;
+    _timerElapsed = true;
+    _remaining = Duration.zero;
+    _maybeEmitFinalRefresh();
+  }
+
+  void _maybeEmitFinalRefresh() {
+    if (_timerElapsed && _wordsComplete) {
+      _emitRefresh();
+      _timerElapsed = false;
+    }
+  }
+
+  void _emitRefresh() {
+    if (!_adRefreshController.isClosed) {
+      _adRefreshController.add(true);
+    }
   }
 }

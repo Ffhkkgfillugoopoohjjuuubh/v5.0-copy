@@ -9,227 +9,303 @@ class AppLocalizationsHi extends AppLocalizations {
   AppLocalizationsHi([String locale = 'hi']) : super(locale);
 
   @override
+  String get appTitle => 'Echo AI';
+
+  @override
   String get appName => 'Echo AI';
 
   @override
-  String get chatTab => 'चैट';
+  String get chatTab => 'Chat';
 
   @override
-  String get newsTab => 'समाचार';
+  String get newsTab => 'News';
 
   @override
-  String get welcomeTitle => 'नमस्ते, मैं Echo AI हूँ';
+  String get greeting => 'Hello! I am Echo AI';
 
   @override
-  String get welcomeSubtitle => 'कोई सवाल पूछें, एक चित्र जोड़ें, या शुरुआत के लिए सीखने वाला संकेत चुनें।';
+  String get greetingSubtitle => 'Your personal AI teacher';
 
   @override
-  String get suggestionPhotosynthesis => 'प्रकाश संश्लेषण समझाओ';
+  String get welcomeTitle => 'Hello! I am Echo AI';
 
   @override
-  String get suggestionMath => 'गणित में मदद करो';
+  String get welcomeSubtitle => 'Your personal AI teacher';
 
   @override
-  String get suggestionHistory => 'इतिहास पर क्विज़ लो';
+  String get suggestionPhotosynthesis => 'Explain photosynthesis';
 
   @override
-  String get suggestionConcept => 'एक अवधारणा समझाओ';
+  String get suggestionMath => 'Help me with math';
 
   @override
-  String get newChat => 'नई चैट';
+  String get suggestionHistory => 'Quiz me on history';
 
   @override
-  String get starred => 'स्टार किए गए';
+  String get suggestionGravity => 'Explain gravity';
 
   @override
-  String get projects => 'प्रोजेक्ट्स';
+  String get suggestionConcept => 'Explain gravity';
 
   @override
-  String get recents => 'हाल के';
+  String get newChat => 'New Chat';
 
   @override
-  String get settings => 'सेटिंग्स';
+  String get starred => 'Starred';
 
   @override
-  String get drawerSubtitle => 'तेज़ी से सीखें, अनुवाद करें और खोजें।';
+  String get projects => 'Projects';
 
   @override
-  String get noStarredChats => 'अभी कोई स्टार की गई चैट नहीं है।';
+  String get recents => 'Recents';
 
   @override
-  String get noProjectsYet => 'अभी कोई प्रोजेक्ट नहीं है।';
+  String get settings => 'Settings';
 
   @override
-  String get noRecentChats => 'अभी कोई हाल की चैट नहीं है।';
+  String get drawerSubtitle => 'Your personal AI teacher';
 
   @override
-  String get addProject => 'प्रोजेक्ट जोड़ें';
+  String get noStarredChats => 'No starred chats yet.';
 
   @override
-  String get projectName => 'प्रोजेक्ट का नाम';
+  String get noProjectsYet => 'No projects yet.';
 
   @override
-  String get createProject => 'प्रोजेक्ट बनाएं';
+  String get noRecentChats => 'No recent sessions yet.';
 
   @override
-  String get renameProject => 'प्रोजेक्ट का नाम बदलें';
+  String get addProject => 'Add project';
 
   @override
-  String get renameChat => 'चैट का नाम बदलें';
+  String get projectName => 'Project name';
 
   @override
-  String get rename => 'नाम बदलें';
+  String get createProject => 'Create project';
 
   @override
-  String get delete => 'हटाएं';
+  String get renameProject => 'Rename project';
 
   @override
-  String get cancel => 'रद्द करें';
+  String get renameChat => 'Rename chat';
 
   @override
-  String get save => 'सहेजें';
+  String get rename => 'Rename';
 
   @override
-  String get searchHint => 'Echo AI से कुछ भी पूछें';
+  String get delete => 'Delete';
 
   @override
-  String get imageAttached => 'चित्र जुड़ा हुआ है';
+  String get cancel => 'Cancel';
 
   @override
-  String get processingImage => 'चित्र प्रोसेस हो रहा है...';
+  String get confirm => 'Confirm';
 
   @override
-  String get camera => 'कैमरा';
+  String get save => 'Save';
 
   @override
-  String get gallery => 'गैलरी';
+  String get share => 'Share';
 
   @override
-  String get send => 'भेजें';
+  String get star => 'Star';
 
   @override
-  String get attachmentPermissionDenied => 'चित्र जोड़ने के लिए अनुमति चाहिए।';
+  String get unstar => 'Unstar';
 
   @override
-  String get thinking => 'Echo AI सोच रहा है';
+  String get addToProject => 'Add to project';
 
   @override
-  String get chatNotFound => 'चैट सत्र नहीं मिला।';
+  String get noProject => 'No project';
 
   @override
-  String get copy => 'कॉपी';
+  String get typeMessage => 'Ask anything...';
 
   @override
-  String get speak => 'सुनें';
+  String get searchHint => 'Ask anything...';
 
   @override
-  String get copiedMessage => 'संदेश कॉपी हो गया।';
+  String get attachImage => 'Attach image';
 
   @override
-  String get india => 'भारत';
+  String get imageAttached => 'Image attached';
 
   @override
-  String get technology => 'तकनीक';
+  String get processingImage => 'Processing image...';
 
   @override
-  String get education => 'शिक्षा';
+  String get camera => 'Camera';
 
   @override
-  String get science => 'विज्ञान';
+  String get gallery => 'Gallery';
 
   @override
-  String get noNewsAvailable => 'अभी कोई समाचार उपलब्ध नहीं है।';
+  String get send => 'Send';
 
   @override
-  String get failedToOpenLink => 'लेख नहीं खुल सका।';
+  String get attachmentPermissionDenied =>
+      'Permission is needed to attach an image.';
 
   @override
-  String get appLanguage => 'ऐप भाषा';
+  String get thinking => 'Thinking...';
 
   @override
-  String get voiceLanguage => 'आवाज़ की भाषा';
+  String get chatNotFound => 'Chat session not found.';
 
   @override
-  String get theme => 'थीम';
+  String get copy => 'Copy';
 
   @override
-  String get light => 'लाइट';
+  String get speak => 'Speak';
 
   @override
-  String get dark => 'डार्क';
+  String get stop => 'Stop';
 
   @override
-  String get system => 'सिस्टम';
+  String get copiedMessage => 'Copied to clipboard.';
 
   @override
-  String get fontSize => 'फ़ॉन्ट आकार';
+  String get confirmDeleteChat => 'Delete this chat permanently?';
 
   @override
-  String get volume => 'आवाज़';
+  String get india => 'India';
 
   @override
-  String get pitch => 'पिच';
+  String get technology => 'Technology';
 
   @override
-  String get speechRate => 'बोलने की गति';
+  String get education => 'Education';
 
   @override
-  String get clearAllChats => 'सभी चैट साफ करें';
+  String get science => 'Science';
 
   @override
-  String get clearAllChatsConfirm => 'इससे सभी सहेजे गए चैट सत्र स्थायी रूप से हट जाएंगे।';
+  String get noNewsAvailable => 'No news available right now.';
 
   @override
-  String get storagePath => 'स्टोरेज पाथ';
+  String get failedToOpenLink => 'Couldn\'t open that article.';
 
   @override
-  String get storageUnavailable => 'स्टोरेज पाथ उपलब्ध नहीं है।';
+  String get appLanguage => 'App language';
 
   @override
-  String get appVersion => 'ऐप संस्करण';
+  String get voiceLanguage => 'Voice language';
 
   @override
-  String get english => 'अंग्रेज़ी';
+  String get voice => 'Voice';
 
   @override
-  String get hindi => 'हिंदी';
+  String get appearance => 'Appearance';
 
   @override
-  String get bengali => 'बंगाली';
+  String get theme => 'Theme';
 
   @override
-  String get imageQuestionFallback => 'कृपया महत्वपूर्ण विवरण समझाएं।';
+  String get light => 'Light';
 
   @override
-  String get imageOnlyPrompt => 'इस चित्र को समझने में मेरी मदद करें।';
+  String get dark => 'Dark';
 
   @override
-  String get justNow => 'अभी अभी';
+  String get system => 'System';
+
+  @override
+  String get lightMode => 'Light';
+
+  @override
+  String get darkMode => 'Dark';
+
+  @override
+  String get systemDefault => 'System';
+
+  @override
+  String get fontSize => 'Font size';
+
+  @override
+  String get volume => 'Volume';
+
+  @override
+  String get pitch => 'Pitch';
+
+  @override
+  String get speechRate => 'Speech rate';
+
+  @override
+  String get data => 'Data';
+
+  @override
+  String get clearAllChats => 'Clear all chats';
+
+  @override
+  String get clearAllChatsConfirm =>
+      'This will permanently remove every saved chat session.';
+
+  @override
+  String get confirmClear =>
+      'This will permanently remove every saved chat session.';
+
+  @override
+  String get storagePath => 'Storage path';
+
+  @override
+  String get storageLocation => 'Storage location';
+
+  @override
+  String get storageUnavailable => 'Storage path unavailable.';
+
+  @override
+  String get about => 'About';
+
+  @override
+  String get appVersion => 'App version';
+
+  @override
+  String get developerInfo => 'Developer info';
+
+  @override
+  String get english => 'English';
+
+  @override
+  String get hindi => 'Hindi';
+
+  @override
+  String get bengali => 'Bengali';
+
+  @override
+  String get imageQuestionFallback => 'Please explain the important details.';
+
+  @override
+  String get imageOnlyPrompt => 'Help me understand this image.';
+
+  @override
+  String get justNow => 'Just now';
 
   @override
   String minutesAgo(int count) {
-    return '$countमि पहले';
+    return '${count}m ago';
   }
 
   @override
   String hoursAgo(int count) {
-    return '$countघं पहले';
+    return '${count}h ago';
   }
 
   @override
   String daysAgo(int count) {
-    return '$countदि पहले';
+    return '${count}d ago';
   }
 
   @override
-  String get retry => 'फिर से कोशिश करें';
+  String get retry => 'Retry';
 
   @override
-  String get noDescriptionAvailable => 'कोई विवरण उपलब्ध नहीं है।';
+  String get noDescriptionAvailable => 'No description available.';
 
   @override
-  String get startNewChat => 'नई चैट शुरू करें';
+  String get startNewChat => 'Start a new chat';
 
   @override
-  String get assistantUnavailable => 'मैं अभी Echo AI तक नहीं पहुँच सका। कृपया अपनी Groq API key या कनेक्शन जांचें और फिर कोशिश करें।';
+  String get assistantUnavailable =>
+      'I couldn\'t reach Echo AI right now. Please check your Groq API key or connection and try again.';
 }

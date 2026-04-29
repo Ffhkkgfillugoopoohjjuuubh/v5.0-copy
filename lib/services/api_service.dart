@@ -12,7 +12,7 @@ class ApiService {
   final http.Client _client;
 
   Future<String> sendMessage(List<ChatMessage> messages) async {
-    if (_isPlaceholderKey) {
+    if (_isMissingKey) {
       return 'API key error. Please contact support.';
     }
 
@@ -21,7 +21,7 @@ class ApiService {
       'messages': <Map<String, String>>[
         <String, String>{
           'role': 'system',
-          'content': 'You are Echo AI, a patient and encouraging teacher.',
+          'content': teacherSystemPrompt,
         },
         ...messages.map(
           (message) => <String, String>{
@@ -74,13 +74,13 @@ class ApiService {
   }
 
   Future<String> expandResponse(String original) async {
-    if (original.trim().isEmpty || _wordCount(original) >= 80 || _isPlaceholderKey) {
+    if (original.trim().isEmpty || _wordCount(original) >= 100 || _isMissingKey) {
       return original;
     }
 
     try {
       return await _sendUtilityPrompt(
-        'Expand the following answer to around 120 words while staying clear, warm, and easy to understand. Return only the expanded answer.\n\n$original',
+        'Expand the following answer with helpful examples and a warm encouraging ending. Keep it clear, student-friendly, and around 140-180 words. Return only the expanded answer.\n\n$original',
       );
     } catch (_) {
       return original;
@@ -88,15 +88,17 @@ class ApiService {
   }
 
   Future<String> translateText(String text, String targetLanguage) async {
+    final normalizedTarget = targetLanguage.trim();
     if (text.trim().isEmpty ||
-        targetLanguage.toLowerCase() == 'english' ||
-        _isPlaceholderKey) {
+        normalizedTarget.toLowerCase().startsWith('en') ||
+        normalizedTarget.toLowerCase() == 'english' ||
+        _isMissingKey) {
       return text;
     }
 
     try {
       return await _sendUtilityPrompt(
-        'Translate the following text to $targetLanguage. Return only the translated text.\n\n$text',
+        'Translate the following text to ${_languageName(normalizedTarget)}. Return only the translated text.\n\n$text',
       );
     } catch (_) {
       return text;
@@ -116,7 +118,8 @@ class ApiService {
           'messages': <Map<String, String>>[
             <String, String>{
               'role': 'system',
-              'content': 'You are Echo AI, a patient and encouraging teacher.',
+              'content':
+                  '$teacherSystemPrompt Be concise and return only the requested text.',
             },
             <String, String>{
               'role': 'user',
@@ -146,7 +149,9 @@ class ApiService {
     return content.trim();
   }
 
-  bool get _isPlaceholderKey => groqApiKey.contains('PASTE_YOUR_GROQ_API_KEY_HERE');
+  bool get _isMissingKey =>
+      groqApiKey.trim().isEmpty ||
+      groqApiKey.contains('PASTE_YOUR_GROQ_API_KEY_HERE');
 
   int _wordCount(String text) {
     return text.trim().split(RegExp(r'\s+')).where((word) => word.isNotEmpty).length;
@@ -167,5 +172,41 @@ class ApiService {
       return 'API key error. Please contact support.';
     }
     return null;
+  }
+
+  String _languageName(String codeOrName) {
+    const names = <String, String>{
+      'en-US': 'English',
+      'hi-IN': 'Hindi',
+      'bn-IN': 'Bengali',
+      'ta-IN': 'Tamil',
+      'te-IN': 'Telugu',
+      'kn-IN': 'Kannada',
+      'ml-IN': 'Malayalam',
+      'mr-IN': 'Marathi',
+      'gu-IN': 'Gujarati',
+      'pa-IN': 'Punjabi',
+      'or-IN': 'Odia',
+      'as-IN': 'Assamese',
+      'ur-PK': 'Urdu',
+      'ar-SA': 'Arabic',
+      'fr-FR': 'French',
+      'es-ES': 'Spanish',
+      'pt-BR': 'Portuguese',
+      'ru-RU': 'Russian',
+      'de-DE': 'German',
+      'it-IT': 'Italian',
+      'ja-JP': 'Japanese',
+      'ko-KR': 'Korean',
+      'zh-CN': 'Chinese',
+      'nl-NL': 'Dutch',
+      'tr-TR': 'Turkish',
+      'vi-VN': 'Vietnamese',
+      'th-TH': 'Thai',
+      'id-ID': 'Indonesian',
+      'pl-PL': 'Polish',
+      'sv-SE': 'Swedish',
+    };
+    return names[codeOrName] ?? codeOrName;
   }
 }

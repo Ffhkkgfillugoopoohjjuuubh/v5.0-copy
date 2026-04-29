@@ -1,17 +1,15 @@
-# ai_tutor
+# Echo AI v3.0
 
-A new Flutter project.
+Echo AI is a Flutter teaching assistant app powered by Groq, ML Kit OCR,
+Flutter TTS, AdMob banners, local chat storage, projects, news feeds, and
+multi-language voice playback.
 
-## Getting Started
+## Run
 
-This project is a starting point for a Flutter application.
+```powershell
+flutter pub get
+flutter run --dart-define=GROQ_API_KEY=your_groq_key_here
+```
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+The API key is intentionally read with `String.fromEnvironment` so it does not
+need to be committed to the repository.

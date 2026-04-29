@@ -5,54 +5,80 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/chat_session.dart';
 import '../models/project_model.dart';
 import '../providers/chat_provider.dart';
+import '../widgets/session_drawer.dart';
 import 'chat_screen.dart';
 import 'news_screen.dart';
 import 'settings_screen.dart';
-import '../widgets/session_drawer.dart';
 
-class HomeScreen extends ConsumerWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends ConsumerState<HomeScreen> {
+  int _selectedIndex = 0;
+
+  @override
+  Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    return DefaultTabController(
-      length: 2,
-      child: Scaffold(
-        drawer: SessionDrawer(
-          onNewChat: () => _openNewChat(context, ref),
-          onSelectSession: (session) => _openSession(context, session),
-          onSelectProject: (project) => _openProjectChat(context, ref, project),
-          onOpenSettings: () {
-            Navigator.of(context).push(
-              MaterialPageRoute<void>(
-                builder: (_) => const SettingsScreen(),
-              ),
-            );
-          },
-        ),
-        appBar: AppBar(
-          title: Text(l10n.appName),
-          bottom: TabBar(
-            tabs: <Widget>[
-              Tab(text: l10n.chatTab),
-              Tab(text: l10n.newsTab),
-            ],
-          ),
-        ),
-        body: TabBarView(
-          children: <Widget>[
-            _ChatLandingView(
-              onPromptSelected: (prompt) => _openNewChat(
-                context,
-                ref,
-                initialPrompt: prompt,
-              ),
+    return Scaffold(
+      drawer: SessionDrawer(
+        onNewChat: () => _openNewChat(context, ref),
+        onSelectSession: (session) => _openSession(context, session),
+        onSelectProject: (project) => _openProjectChat(context, ref, project),
+        onOpenSettings: () {
+          Navigator.of(context).push(
+            MaterialPageRoute<void>(
+              builder: (_) => const SettingsScreen(),
             ),
-            const NewsScreen(),
-          ],
-        ),
+          );
+        },
+      ),
+      appBar: AppBar(
+        title: Text(l10n.appName),
+        centerTitle: true,
+      ),
+      body: IndexedStack(
+        index: _selectedIndex,
+        children: <Widget>[
+          _ChatLandingView(
+            onPromptSelected: (prompt) => _openNewChat(
+              context,
+              ref,
+              initialPrompt: prompt,
+            ),
+          ),
+          const NewsScreen(),
+        ],
+      ),
+      floatingActionButton: _selectedIndex == 0
+          ? FloatingActionButton(
+              onPressed: () => _openNewChat(context, ref),
+              child: const Icon(Icons.add_comment_outlined),
+            )
+          : null,
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: _selectedIndex,
+        onDestinationSelected: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
+        destinations: <NavigationDestination>[
+          NavigationDestination(
+            icon: const Icon(Icons.chat_bubble_outline),
+            selectedIcon: const Icon(Icons.chat_bubble),
+            label: l10n.chatTab,
+          ),
+          NavigationDestination(
+            icon: const Icon(Icons.newspaper_outlined),
+            selectedIcon: const Icon(Icons.newspaper_rounded),
+            label: l10n.newsTab,
+          ),
+        ],
       ),
     );
   }
@@ -122,67 +148,37 @@ class _ChatLandingView extends StatelessWidget {
       l10n.suggestionPhotosynthesis,
       l10n.suggestionMath,
       l10n.suggestionHistory,
-      l10n.suggestionConcept,
+      l10n.suggestionGravity,
     ];
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.fromLTRB(20, 28, 20, 100),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(24),
-            decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: <Color>[
-                  Color(0xFF8B5CF6),
-                  Color(0xFF6D4AE0),
-                ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  l10n.welcomeTitle,
-                  style: theme.textTheme.headlineSmall?.copyWith(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Text(
-                  l10n.welcomeSubtitle,
-                  style: theme.textTheme.bodyLarge?.copyWith(
-                    color: Colors.white.withValues(alpha: 0.92),
-                    height: 1.45,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 28),
           Text(
-            l10n.startNewChat,
-            style: theme.textTheme.titleMedium?.copyWith(
-              fontWeight: FontWeight.w700,
+            l10n.greeting,
+            style: theme.textTheme.headlineMedium?.copyWith(
+              fontWeight: FontWeight.w800,
             ),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 8),
+          Text(
+            l10n.greetingSubtitle,
+            style: theme.textTheme.titleMedium?.copyWith(
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.70),
+            ),
+          ),
+          const SizedBox(height: 30),
           Wrap(
             spacing: 10,
             runSpacing: 10,
             children: suggestions
                 .map(
                   (suggestion) => ActionChip(
+                    avatar: const Icon(Icons.auto_awesome, size: 18),
                     label: Text(suggestion),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
                     onPressed: () => onPromptSelected(suggestion),
                   ),
                 )

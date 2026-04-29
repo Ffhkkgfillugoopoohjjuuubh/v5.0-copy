@@ -44,52 +44,64 @@ class AdProvider extends ChangeNotifier {
       return;
     }
 
-    _disposePlacement(BannerPlacement.top);
-    _disposePlacement(BannerPlacement.bottom);
-    _createBanner(BannerPlacement.top);
-    _createBanner(BannerPlacement.bottom);
+    try {
+      _disposePlacement(BannerPlacement.top);
+      _disposePlacement(BannerPlacement.bottom);
+      _createBanner(BannerPlacement.top);
+      _createBanner(BannerPlacement.bottom);
+    } catch (_) {}
   }
 
   void _createBanner(BannerPlacement placement) {
-    final ad = BannerAd(
-      adUnitId: placement == BannerPlacement.top
-          ? topBannerAdUnitId
-          : bottomBannerAdUnitId,
-      request: const AdRequest(),
-      size: AdSize.banner,
-      listener: BannerAdListener(
-        onAdLoaded: (_) {
-          if (placement == BannerPlacement.top) {
-            _topLoaded = true;
-          } else {
-            _bottomLoaded = true;
-          }
-          notifyListeners();
-        },
-        onAdFailedToLoad: (ad, _) {
-          ad.dispose();
-          if (placement == BannerPlacement.top) {
-            _topBannerAd = null;
-            _topLoaded = false;
-          } else {
-            _bottomBannerAd = null;
-            _bottomLoaded = false;
-          }
-          notifyListeners();
-        },
-      ),
-    );
+    try {
+      final ad = BannerAd(
+        adUnitId: placement == BannerPlacement.top
+            ? topBannerAdUnitId
+            : bottomBannerAdUnitId,
+        request: const AdRequest(),
+        size: AdSize.banner,
+        listener: BannerAdListener(
+          onAdLoaded: (_) {
+            if (placement == BannerPlacement.top) {
+              _topLoaded = true;
+            } else {
+              _bottomLoaded = true;
+            }
+            notifyListeners();
+          },
+          onAdFailedToLoad: (ad, _) {
+            ad.dispose();
+            if (placement == BannerPlacement.top) {
+              _topBannerAd = null;
+              _topLoaded = false;
+            } else {
+              _bottomBannerAd = null;
+              _bottomLoaded = false;
+            }
+            notifyListeners();
+          },
+        ),
+      );
 
-    if (placement == BannerPlacement.top) {
-      _topBannerAd = ad;
-      _topLoaded = false;
-    } else {
-      _bottomBannerAd = ad;
-      _bottomLoaded = false;
+      if (placement == BannerPlacement.top) {
+        _topBannerAd = ad;
+        _topLoaded = false;
+      } else {
+        _bottomBannerAd = ad;
+        _bottomLoaded = false;
+      }
+
+      ad.load();
+      notifyListeners();
+    } catch (_) {
+      if (placement == BannerPlacement.top) {
+        _topBannerAd = null;
+        _topLoaded = false;
+      } else {
+        _bottomBannerAd = null;
+        _bottomLoaded = false;
+      }
     }
-
-    ad.load();
-    notifyListeners();
   }
 
   void _disposePlacement(BannerPlacement placement) {

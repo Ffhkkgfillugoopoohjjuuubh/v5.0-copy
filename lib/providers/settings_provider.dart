@@ -2,9 +2,47 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../services/tts_service.dart';
+
 late SharedPreferences _appPreferences;
 String _bootstrapLocaleCode = 'en';
 String _bootstrapThemeMode = 'system';
+
+const List<String> supportedAppLanguages = <String>[
+  'en',
+  'hi',
+  'bn',
+  'ta',
+  'te',
+  'kn',
+  'ml',
+  'mr',
+  'gu',
+  'pa',
+  'fr',
+  'es',
+  'de',
+  'ja',
+  'ko',
+];
+
+const Map<String, String> appLanguageNames = <String, String>{
+  'en': 'English',
+  'hi': 'Hindi',
+  'bn': 'Bengali',
+  'ta': 'Tamil',
+  'te': 'Telugu',
+  'kn': 'Kannada',
+  'ml': 'Malayalam',
+  'mr': 'Marathi',
+  'gu': 'Gujarati',
+  'pa': 'Punjabi',
+  'fr': 'French',
+  'es': 'Spanish',
+  'de': 'German',
+  'ja': 'Japanese',
+  'ko': 'Korean',
+};
 
 void configureAppPreferences(
   SharedPreferences preferences, {
@@ -63,9 +101,17 @@ class SettingsState {
   }
 
   factory SettingsState.initialFromPreferences(SharedPreferences preferences) {
+    final savedAppLanguage =
+        preferences.getString('appLanguage') ?? _bootstrapLocaleCode;
+    final savedVoiceLanguage =
+        preferences.getString('voiceLanguage') ?? 'en-US';
     return SettingsState(
-      appLanguage: preferences.getString('appLanguage') ?? _bootstrapLocaleCode,
-      voiceLanguage: preferences.getString('voiceLanguage') ?? 'en',
+      appLanguage: supportedAppLanguages.contains(savedAppLanguage)
+          ? savedAppLanguage
+          : 'en',
+      voiceLanguage: TtsService.supportedLanguageCodes.contains(savedVoiceLanguage)
+          ? savedVoiceLanguage
+          : 'en-US',
       themeMode: themeModeFromString(
         preferences.getString('themeMode') ?? _bootstrapThemeMode,
       ),
@@ -84,13 +130,18 @@ class SettingsNotifier extends StateNotifier<SettingsState> {
   final SharedPreferences _preferences;
 
   Future<void> setAppLanguage(String languageCode) async {
-    state = state.copyWith(appLanguage: languageCode);
-    await _preferences.setString('appLanguage', languageCode);
+    final normalized =
+        supportedAppLanguages.contains(languageCode) ? languageCode : 'en';
+    state = state.copyWith(appLanguage: normalized);
+    await _preferences.setString('appLanguage', normalized);
   }
 
   Future<void> setVoiceLanguage(String languageCode) async {
-    state = state.copyWith(voiceLanguage: languageCode);
-    await _preferences.setString('voiceLanguage', languageCode);
+    final normalized = TtsService.supportedLanguageCodes.contains(languageCode)
+        ? languageCode
+        : 'en-US';
+    state = state.copyWith(voiceLanguage: normalized);
+    await _preferences.setString('voiceLanguage', normalized);
   }
 
   Future<void> setThemeMode(String theme) async {

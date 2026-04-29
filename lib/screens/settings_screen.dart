@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/chat_provider.dart';
 import '../providers/settings_provider.dart';
 import '../services/storage_service.dart';
+import '../services/tts_service.dart';
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
@@ -20,151 +21,153 @@ class SettingsScreen extends ConsumerWidget {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: <Widget>[
-          Card(
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    l10n.appLanguage,
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                  const SizedBox(height: 8),
-                  DropdownButtonFormField<String>(
-                    initialValue: settings.appLanguage,
-                    items: _languageItems(l10n),
-                    onChanged: (value) {
-                      if (value != null) {
-                        settingsNotifier.setAppLanguage(value);
-                      }
-                    },
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    l10n.voiceLanguage,
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                  const SizedBox(height: 8),
-                  DropdownButtonFormField<String>(
-                    initialValue: settings.voiceLanguage,
-                    items: _languageItems(l10n),
-                    onChanged: (value) {
-                      if (value != null) {
-                        settingsNotifier.setVoiceLanguage(value);
-                      }
-                    },
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    l10n.theme,
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                  const SizedBox(height: 8),
-                  DropdownButtonFormField<String>(
-                    initialValue: themeModeToString(settings.themeMode),
-                    items: <DropdownMenuItem<String>>[
-                      DropdownMenuItem(
-                        value: 'system',
-                        child: Text(l10n.system),
+          _Section(
+            title: l10n.appLanguage,
+            children: <Widget>[
+              DropdownButtonFormField<String>(
+                initialValue: settings.appLanguage,
+                items: supportedAppLanguages
+                    .map(
+                      (code) => DropdownMenuItem<String>(
+                        value: code,
+                        child: Text(appLanguageNames[code] ?? code),
                       ),
-                      DropdownMenuItem(
-                        value: 'light',
-                        child: Text(l10n.light),
+                    )
+                    .toList(),
+                onChanged: (value) {
+                  if (value != null) {
+                    settingsNotifier.setAppLanguage(value);
+                  }
+                },
+              ),
+              const SizedBox(height: 16),
+              Text(
+                l10n.voiceLanguage,
+                style: Theme.of(context).textTheme.titleSmall,
+              ),
+              const SizedBox(height: 8),
+              DropdownButtonFormField<String>(
+                initialValue: settings.voiceLanguage,
+                items: TtsService.supportedLanguageCodes
+                    .map(
+                      (code) => DropdownMenuItem<String>(
+                        value: code,
+                        child: Text('${TtsService.languageNames[code]} ($code)'),
                       ),
-                      DropdownMenuItem(
-                        value: 'dark',
-                        child: Text(l10n.dark),
-                      ),
-                    ],
-                    onChanged: (value) {
-                      if (value != null) {
-                        settingsNotifier.setThemeMode(value);
-                      }
-                    },
+                    )
+                    .toList(),
+                onChanged: (value) {
+                  if (value != null) {
+                    settingsNotifier.setVoiceLanguage(value);
+                  }
+                },
+              ),
+            ],
+          ),
+          _Section(
+            title: l10n.voice,
+            children: <Widget>[
+              _SliderSetting(
+                label: l10n.volume,
+                value: settings.volume,
+                min: 0,
+                max: 1,
+                onChanged: settingsNotifier.setVolume,
+              ),
+              _SliderSetting(
+                label: l10n.pitch,
+                value: settings.pitch,
+                min: 0.8,
+                max: 1.6,
+                onChanged: settingsNotifier.setPitch,
+              ),
+              _SliderSetting(
+                label: l10n.speechRate,
+                value: settings.speechRate,
+                min: 0.2,
+                max: 0.7,
+                onChanged: settingsNotifier.setSpeechRate,
+              ),
+            ],
+          ),
+          _Section(
+            title: l10n.appearance,
+            children: <Widget>[
+              SegmentedButton<String>(
+                segments: <ButtonSegment<String>>[
+                  ButtonSegment<String>(
+                    value: 'system',
+                    icon: const Icon(Icons.phone_android_outlined),
+                    label: Text(l10n.systemDefault),
+                  ),
+                  ButtonSegment<String>(
+                    value: 'light',
+                    icon: const Icon(Icons.light_mode_outlined),
+                    label: Text(l10n.lightMode),
+                  ),
+                  ButtonSegment<String>(
+                    value: 'dark',
+                    icon: const Icon(Icons.dark_mode_outlined),
+                    label: Text(l10n.darkMode),
                   ),
                 ],
+                selected: <String>{themeModeToString(settings.themeMode)},
+                onSelectionChanged: (selection) {
+                  settingsNotifier.setThemeMode(selection.first);
+                },
               ),
-            ),
-          ),
-          const SizedBox(height: 12),
-          Card(
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  _SliderSetting(
-                    label: l10n.fontSize,
-                    value: settings.fontSize,
-                    min: 12,
-                    max: 24,
-                    onChanged: settingsNotifier.setFontSize,
-                  ),
-                  _SliderSetting(
-                    label: l10n.volume,
-                    value: settings.volume,
-                    min: 0,
-                    max: 1,
-                    onChanged: settingsNotifier.setVolume,
-                  ),
-                  _SliderSetting(
-                    label: l10n.pitch,
-                    value: settings.pitch,
-                    min: 0.8,
-                    max: 1.6,
-                    onChanged: settingsNotifier.setPitch,
-                  ),
-                  _SliderSetting(
-                    label: l10n.speechRate,
-                    value: settings.speechRate,
-                    min: 0.2,
-                    max: 0.7,
-                    onChanged: settingsNotifier.setSpeechRate,
-                  ),
-                ],
+              const SizedBox(height: 18),
+              _SliderSetting(
+                label: l10n.fontSize,
+                value: settings.fontSize,
+                min: 12,
+                max: 24,
+                onChanged: settingsNotifier.setFontSize,
               ),
-            ),
+            ],
           ),
-          const SizedBox(height: 12),
-          Card(
-            child: Column(
-              children: <Widget>[
-                ListTile(
-                  title: Text(l10n.clearAllChats),
-                  subtitle: Text(l10n.clearAllChatsConfirm),
-                  trailing: const Icon(Icons.delete_outline),
-                  onTap: () => _confirmClearChats(context, ref, l10n),
-                ),
-                FutureBuilder<String>(
-                  future: ref.read(storageServiceProvider).getStoragePath(),
-                  builder: (context, snapshot) {
-                    return ListTile(
-                      title: Text(l10n.storagePath),
-                      subtitle: Text(
-                        snapshot.data ?? l10n.storageUnavailable,
-                      ),
-                    );
-                  },
-                ),
-                ListTile(
-                  title: Text(l10n.appVersion),
-                  subtitle: const Text('1.0.0+1'),
-                ),
-              ],
-            ),
+          _Section(
+            title: l10n.data,
+            children: <Widget>[
+              ListTile(
+                contentPadding: EdgeInsets.zero,
+                title: Text(l10n.clearAllChats),
+                subtitle: Text(l10n.clearAllChatsConfirm),
+                trailing: const Icon(Icons.delete_outline),
+                onTap: () => _confirmClearChats(context, ref, l10n),
+              ),
+              FutureBuilder<String>(
+                future: ref.read(storageServiceProvider).getStoragePath(),
+                builder: (context, snapshot) {
+                  return ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(l10n.storageLocation),
+                    subtitle: Text(
+                      snapshot.data ?? l10n.storageUnavailable,
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
+          _Section(
+            title: l10n.about,
+            children: <Widget>[
+              ListTile(
+                contentPadding: EdgeInsets.zero,
+                title: Text(l10n.appVersion),
+                subtitle: const Text('Echo AI v3.0'),
+              ),
+              ListTile(
+                contentPadding: EdgeInsets.zero,
+                title: Text(l10n.developerInfo),
+                subtitle: const Text('Built with Flutter, Groq, ML Kit, and AdMob.'),
+              ),
+            ],
           ),
         ],
       ),
     );
-  }
-
-  List<DropdownMenuItem<String>> _languageItems(AppLocalizations l10n) {
-    return <DropdownMenuItem<String>>[
-      DropdownMenuItem(value: 'en', child: Text(l10n.english)),
-      DropdownMenuItem(value: 'hi', child: Text(l10n.hindi)),
-      DropdownMenuItem(value: 'bn', child: Text(l10n.bengali)),
-    ];
   }
 
   Future<void> _confirmClearChats(
@@ -177,7 +180,7 @@ class SettingsScreen extends ConsumerWidget {
       builder: (context) {
         return AlertDialog(
           title: Text(l10n.clearAllChats),
-          content: Text(l10n.clearAllChatsConfirm),
+          content: Text(l10n.confirmClear),
           actions: <Widget>[
             TextButton(
               onPressed: () => Navigator.of(context).pop(false),
@@ -185,7 +188,7 @@ class SettingsScreen extends ConsumerWidget {
             ),
             FilledButton(
               onPressed: () => Navigator.of(context).pop(true),
-              child: Text(l10n.delete),
+              child: Text(l10n.confirm),
             ),
           ],
         );
@@ -206,6 +209,50 @@ class SettingsScreen extends ConsumerWidget {
   }
 }
 
+class _Section extends StatelessWidget {
+  const _Section({
+    required this.title,
+    required this.children,
+  });
+
+  final String title;
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 20),
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: theme.colorScheme.surface,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: theme.colorScheme.outlineVariant.withValues(alpha: 0.55),
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                title,
+                style: theme.textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+              const SizedBox(height: 14),
+              ...children,
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class _SliderSetting extends StatelessWidget {
   const _SliderSetting({
     required this.label,
@@ -223,18 +270,26 @@ class _SliderSetting extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text('$label: ${value.toStringAsFixed(2)}'),
-        Slider(
-          value: value,
-          min: min,
-          max: max,
-          onChanged: onChanged,
-        ),
-        const SizedBox(height: 8),
-      ],
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text(label),
+              Text(value.toStringAsFixed(2)),
+            ],
+          ),
+          Slider(
+            value: value,
+            min: min,
+            max: max,
+            onChanged: onChanged,
+          ),
+        ],
+      ),
     );
   }
 }

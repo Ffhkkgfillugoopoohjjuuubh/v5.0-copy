@@ -9,6 +9,9 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
+  String get appTitle => 'Echo AI';
+
+  @override
   String get appName => 'Echo AI';
 
   @override
@@ -18,22 +21,31 @@ class AppLocalizationsEn extends AppLocalizations {
   String get newsTab => 'News';
 
   @override
-  String get welcomeTitle => 'Hello, I\'m Echo AI';
+  String get greeting => 'Hello! I am Echo AI';
 
   @override
-  String get welcomeSubtitle => 'Ask a question, attach an image, or pick a learning prompt to get started.';
+  String get greetingSubtitle => 'Your personal AI teacher';
+
+  @override
+  String get welcomeTitle => 'Hello! I am Echo AI';
+
+  @override
+  String get welcomeSubtitle => 'Your personal AI teacher';
 
   @override
   String get suggestionPhotosynthesis => 'Explain photosynthesis';
 
   @override
-  String get suggestionMath => 'Help with math';
+  String get suggestionMath => 'Help me with math';
 
   @override
   String get suggestionHistory => 'Quiz me on history';
 
   @override
-  String get suggestionConcept => 'Explain a concept';
+  String get suggestionGravity => 'Explain gravity';
+
+  @override
+  String get suggestionConcept => 'Explain gravity';
 
   @override
   String get newChat => 'New Chat';
@@ -51,7 +63,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings => 'Settings';
 
   @override
-  String get drawerSubtitle => 'Learn, translate, and explore faster.';
+  String get drawerSubtitle => 'Your personal AI teacher';
 
   @override
   String get noStarredChats => 'No starred chats yet.';
@@ -60,7 +72,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noProjectsYet => 'No projects yet.';
 
   @override
-  String get noRecentChats => 'No recent chats yet.';
+  String get noRecentChats => 'No recent sessions yet.';
 
   @override
   String get addProject => 'Add project';
@@ -87,10 +99,34 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cancel => 'Cancel';
 
   @override
+  String get confirm => 'Confirm';
+
+  @override
   String get save => 'Save';
 
   @override
-  String get searchHint => 'Ask Echo AI anything';
+  String get share => 'Share';
+
+  @override
+  String get star => 'Star';
+
+  @override
+  String get unstar => 'Unstar';
+
+  @override
+  String get addToProject => 'Add to project';
+
+  @override
+  String get noProject => 'No project';
+
+  @override
+  String get typeMessage => 'Ask anything...';
+
+  @override
+  String get searchHint => 'Ask anything...';
+
+  @override
+  String get attachImage => 'Attach image';
 
   @override
   String get imageAttached => 'Image attached';
@@ -108,10 +144,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get send => 'Send';
 
   @override
-  String get attachmentPermissionDenied => 'Permission is needed to attach an image.';
+  String get attachmentPermissionDenied =>
+      'Permission is needed to attach an image.';
 
   @override
-  String get thinking => 'Echo AI is thinking';
+  String get thinking => 'Thinking...';
 
   @override
   String get chatNotFound => 'Chat session not found.';
@@ -123,7 +160,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get speak => 'Speak';
 
   @override
-  String get copiedMessage => 'Message copied.';
+  String get stop => 'Stop';
+
+  @override
+  String get copiedMessage => 'Copied to clipboard.';
+
+  @override
+  String get confirmDeleteChat => 'Delete this chat permanently?';
 
   @override
   String get india => 'India';
@@ -150,6 +193,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get voiceLanguage => 'Voice language';
 
   @override
+  String get voice => 'Voice';
+
+  @override
+  String get appearance => 'Appearance';
+
+  @override
   String get theme => 'Theme';
 
   @override
@@ -160,6 +209,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get system => 'System';
+
+  @override
+  String get lightMode => 'Light';
+
+  @override
+  String get darkMode => 'Dark';
+
+  @override
+  String get systemDefault => 'System';
 
   @override
   String get fontSize => 'Font size';
@@ -174,19 +232,36 @@ class AppLocalizationsEn extends AppLocalizations {
   String get speechRate => 'Speech rate';
 
   @override
+  String get data => 'Data';
+
+  @override
   String get clearAllChats => 'Clear all chats';
 
   @override
-  String get clearAllChatsConfirm => 'This will permanently remove every saved chat session.';
+  String get clearAllChatsConfirm =>
+      'This will permanently remove every saved chat session.';
+
+  @override
+  String get confirmClear =>
+      'This will permanently remove every saved chat session.';
 
   @override
   String get storagePath => 'Storage path';
 
   @override
+  String get storageLocation => 'Storage location';
+
+  @override
   String get storageUnavailable => 'Storage path unavailable.';
 
   @override
+  String get about => 'About';
+
+  @override
   String get appVersion => 'App version';
+
+  @override
+  String get developerInfo => 'Developer info';
 
   @override
   String get english => 'English';
@@ -231,5 +306,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get startNewChat => 'Start a new chat';
 
   @override
-  String get assistantUnavailable => 'I couldn\'t reach Echo AI right now. Please check your Groq API key or connection and try again.';
+  String get assistantUnavailable =>
+      'I couldn\'t reach Echo AI right now. Please check your Groq API key or connection and try again.';
 }

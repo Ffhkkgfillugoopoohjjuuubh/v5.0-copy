@@ -32,6 +32,8 @@ migrate_working_dir/
 .pub/
 /build/
 /coverage/
+ECHO_AI_V3_PROMPT.txt
+.appdata/
 
 # Symbolication related
 app.*.symbols

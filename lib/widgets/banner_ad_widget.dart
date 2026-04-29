@@ -22,7 +22,9 @@ class _BannerAdWidgetState extends ConsumerState<BannerAdWidget> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(adProvider).ensureLoaded(widget.placement);
+      try {
+        ref.read(adProvider).ensureLoaded(widget.placement);
+      } catch (_) {}
     });
   }
 
@@ -32,7 +34,12 @@ class _BannerAdWidgetState extends ConsumerState<BannerAdWidget> {
       return const SizedBox.shrink();
     }
 
-    final provider = ref.watch(adProvider);
+    late final AdProvider provider;
+    try {
+      provider = ref.watch(adProvider);
+    } catch (_) {
+      return const SizedBox.shrink();
+    }
     final ad = widget.placement == BannerPlacement.top
         ? provider.topBannerAd
         : provider.bottomBannerAd;
@@ -44,9 +51,13 @@ class _BannerAdWidgetState extends ConsumerState<BannerAdWidget> {
       return const SizedBox(height: 50);
     }
 
-    return SizedBox(
-      height: 50,
-      child: AdWidget(ad: ad),
-    );
+    try {
+      return SizedBox(
+        height: 50,
+        child: AdWidget(ad: ad),
+      );
+    } catch (_) {
+      return const SizedBox.shrink();
+    }
   }
 }

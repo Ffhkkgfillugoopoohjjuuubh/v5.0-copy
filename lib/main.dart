@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -20,7 +19,8 @@ Future<void> main() async {
     DeviceOrientation.portraitUp,
   ]);
   try {
-    await TtsService.instance.init();
+    final tts = TtsService();
+    await tts.initialize();
   } catch (_) {}
   final prefs = await SharedPreferences.getInstance();
   final savedLocale = prefs.getString('appLanguage') ?? 'en';
@@ -37,8 +37,8 @@ class EchoAIApp extends ConsumerWidget {
   const EchoAIApp({super.key});
 
   static const Color _primaryColor = Color(0xFF8B5CF6);
-  static const Color _darkBackground = Color(0xFF1A1A2E);
-  static const Color _darkSurface = Color(0xFF16213E);
+  static const Color _darkBackground = Color(0xFF0F0F1A);
+  static const Color _darkSurface = Color(0xFF1A1A2E);
   static const Color _lightBackground = Color(0xFFF7F7F8);
   static const Color _lightSurface = Color(0xFFFFFFFF);
 
@@ -55,13 +55,20 @@ class EchoAIApp extends ConsumerWidget {
         Locale('en'),
         Locale('hi'),
         Locale('bn'),
+        Locale('ta'),
+        Locale('te'),
+        Locale('kn'),
+        Locale('ml'),
+        Locale('mr'),
+        Locale('gu'),
+        Locale('pa'),
+        Locale('fr'),
+        Locale('es'),
+        Locale('de'),
+        Locale('ja'),
+        Locale('ko'),
       ],
-      localizationsDelegates: <LocalizationsDelegate<dynamic>>[
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
       theme: _buildTheme(
         brightness: Brightness.light,
         background: _lightBackground,
@@ -112,7 +119,7 @@ class EchoAIApp extends ConsumerWidget {
         elevation: 0,
         margin: EdgeInsets.zero,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(8),
         ),
       ),
       drawerTheme: DrawerThemeData(

@@ -118,6 +118,27 @@ class ChatNotifier extends StateNotifier<List<ChatSession>> {
     state = _sorted(sessions);
   }
 
+  Future<void> assignToProject(String sessionId, String? projectId) async {
+    final sessions = <ChatSession>[];
+
+    for (final session in state) {
+      if (session.id != sessionId) {
+        sessions.add(session);
+        continue;
+      }
+
+      final updated = session.copyWith(
+        projectId: projectId,
+        clearProjectId: projectId == null,
+        updatedAt: DateTime.now(),
+      );
+      sessions.add(updated);
+      await _storageService.saveSession(updated);
+    }
+
+    state = _sorted(sessions);
+  }
+
   Future<void> clearAll() async {
     state = const <ChatSession>[];
     await _storageService.clearAllSessions();
