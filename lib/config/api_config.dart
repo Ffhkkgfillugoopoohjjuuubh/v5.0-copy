@@ -1,7 +1,6 @@
-const String deepseekApiKey = 'sk-21e643e2e8574953926c9d3c6c7d47f9';
-
-const String baseUrl = 'https://api.deepseek.com/v1';
-const String aiModel = 'deepseek-chat';
+const String groqApiKey = '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';
+const String groqApiEndpoint = 'https://api.groq.com/openai/v1/chat/completions';
+const String groqModel = 'llama-3.1-8b-instant';
 const String teacherSystemPrompt =
     'You are Echo AI, a warm, patient, and encouraging teacher assistant. '
     'Use simple everyday language. Avoid jargon unless necessary, and when '

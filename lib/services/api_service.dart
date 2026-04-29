@@ -16,7 +16,7 @@ class ApiService {
   static const String _networkErrorMessage =
       'Unable to connect to Echo AI. Please check your internet and try again.';
 
-  Uri get _chatCompletionsUri => Uri.parse('$baseUrl/chat/completions');
+  Uri get _chatCompletionsUri => Uri.parse(groqApiEndpoint);
 
   Future<String> sendMessage(List<ChatMessage> messages) async {
     if (_isMissingKey) {
@@ -24,7 +24,7 @@ class ApiService {
     }
 
     final payload = <String, dynamic>{
-      'model': aiModel,
+      'model': groqModel,
       'messages': <Map<String, String>>[
         <String, String>{
           'role': 'system',
@@ -44,7 +44,7 @@ class ApiService {
       final response = await _client.post(
         _chatCompletionsUri,
         headers: <String, String>{
-          'Authorization': 'Bearer $deepseekApiKey',
+          'Authorization': 'Bearer $groqApiKey',
           'Content-Type': 'application/json',
         },
         body: jsonEncode(payload),
@@ -117,12 +117,12 @@ class ApiService {
     final response = await _client.post(
       _chatCompletionsUri,
       headers: <String, String>{
-        'Authorization': 'Bearer $deepseekApiKey',
+        'Authorization': 'Bearer $groqApiKey',
         'Content-Type': 'application/json',
       },
       body: jsonEncode(
         <String, dynamic>{
-          'model': aiModel,
+          'model': groqModel,
           'messages': <Map<String, String>>[
             <String, String>{
               'role': 'system',
@@ -159,7 +159,7 @@ class ApiService {
   }
 
   bool get _isMissingKey =>
-      deepseekApiKey.trim().isEmpty || deepseekApiKey == 'DEEPSEEK_API_KEY_HERE';
+      groqApiKey.trim().isEmpty || groqApiKey == 'GROQ_API_KEY_HERE';
 
   int _wordCount(String text) {
     return text.trim().split(RegExp(r'\s+')).where((word) => word.isNotEmpty).length;
@@ -179,12 +179,12 @@ class ApiService {
     final response = await _client.post(
       _chatCompletionsUri,
       headers: <String, String>{
-        'Authorization': 'Bearer $deepseekApiKey',
+        'Authorization': 'Bearer $groqApiKey',
         'Content-Type': 'application/json',
       },
       body: jsonEncode(
         <String, dynamic>{
-          'model': aiModel,
+          'model': groqModel,
           'messages': <Map<String, String>>[
             <String, String>{
               'role': 'system',
