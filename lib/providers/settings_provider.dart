@@ -78,7 +78,15 @@ class SettingsState {
   final double pitch;
   final double speechRate;
 
-  Locale get locale => Locale(appLanguage);
+  Locale get locale {
+    final normalized =
+        supportedAppLanguages.contains(appLanguage) ? appLanguage : 'en';
+    return Locale(normalized);
+  }
+
+  static List<Locale> get supportedLocales {
+    return supportedAppLanguages.map(Locale.new).toList();
+  }
 
   SettingsState copyWith({
     String? appLanguage,

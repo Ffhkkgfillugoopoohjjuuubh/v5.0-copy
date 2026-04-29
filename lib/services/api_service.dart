@@ -11,13 +11,20 @@ class ApiService {
 
   final http.Client _client;
 
+  static const String _missingKeyMessage =
+      'API key error. Please contact support.';
+  static const String _networkErrorMessage =
+      'Unable to connect to Echo AI. Please check your internet and try again.';
+
+  Uri get _chatCompletionsUri => Uri.parse('$baseUrl/chat/completions');
+
   Future<String> sendMessage(List<ChatMessage> messages) async {
     if (_isMissingKey) {
-      return 'API key error. Please contact support.';
+      return _missingKeyMessage;
     }
 
     final payload = <String, dynamic>{
-      'model': groqModel,
+      'model': aiModel,
       'messages': <Map<String, String>>[
         <String, String>{
           'role': 'system',
@@ -35,9 +42,9 @@ class ApiService {
 
     try {
       final response = await _client.post(
-        Uri.parse(groqApiEndpoint),
+        _chatCompletionsUri,
         headers: <String, String>{
-          'Authorization': 'Bearer $groqApiKey',
+          'Authorization': 'Bearer $deepseekApiKey',
           'Content-Type': 'application/json',
         },
         body: jsonEncode(payload),
@@ -49,7 +56,7 @@ class ApiService {
           return friendly;
         }
 
-        return 'Unable to connect to Echo AI. Please check your internet connection or try again later.';
+        return _networkErrorMessage;
       }
 
       final json = jsonDecode(response.body) as Map<String, dynamic>;
@@ -60,16 +67,16 @@ class ApiService {
       final content = message?['content'] as String?;
 
       if (content == null || content.trim().isEmpty) {
-        return 'Unable to connect to Echo AI. Please check your internet connection or try again later.';
+        return _networkErrorMessage;
       }
 
       return content.trim();
     } on SocketException {
-      return 'Unable to connect to Echo AI. Please check your internet connection or try again later.';
+      return _networkErrorMessage;
     } on http.ClientException {
-      return 'Unable to connect to Echo AI. Please check your internet connection or try again later.';
+      return _networkErrorMessage;
     } catch (_) {
-      return 'Unable to connect to Echo AI. Please check your internet connection or try again later.';
+      return _networkErrorMessage;
     }
   }
 
@@ -97,8 +104,9 @@ class ApiService {
     }
 
     try {
-      return await _sendUtilityPrompt(
-        'Translate the following text to ${_languageName(normalizedTarget)}. Return only the translated text.\n\n$text',
+      return await _sendTranslationPrompt(
+        text: text,
+        targetLanguage: normalizedTarget,
       );
     } catch (_) {
       return text;
@@ -107,14 +115,14 @@ class ApiService {
 
   Future<String> _sendUtilityPrompt(String prompt) async {
     final response = await _client.post(
-      Uri.parse(groqApiEndpoint),
+      _chatCompletionsUri,
       headers: <String, String>{
-        'Authorization': 'Bearer $groqApiKey',
+        'Authorization': 'Bearer $deepseekApiKey',
         'Content-Type': 'application/json',
       },
       body: jsonEncode(
         <String, dynamic>{
-          'model': groqModel,
+          'model': aiModel,
           'messages': <Map<String, String>>[
             <String, String>{
               'role': 'system',
@@ -132,7 +140,8 @@ class ApiService {
     );
 
     if (response.statusCode < 200 || response.statusCode >= 300) {
-      throw Exception(_extractErrorMessage(response.body));
+      final friendly = _friendlyMessageForStatusCode(response.statusCode);
+      throw Exception(friendly ?? _networkErrorMessage);
     }
 
     final json = jsonDecode(response.body) as Map<String, dynamic>;
@@ -143,35 +152,72 @@ class ApiService {
     final content = message?['content'] as String?;
 
     if (content == null || content.trim().isEmpty) {
-      throw Exception('Groq returned an empty response.');
+      throw Exception(_networkErrorMessage);
     }
 
     return content.trim();
   }
 
   bool get _isMissingKey =>
-      groqApiKey.trim().isEmpty ||
-      groqApiKey.contains('PASTE_YOUR_GROQ_API_KEY_HERE');
+      deepseekApiKey.trim().isEmpty || deepseekApiKey == 'DEEPSEEK_API_KEY_HERE';
 
   int _wordCount(String text) {
     return text.trim().split(RegExp(r'\s+')).where((word) => word.isNotEmpty).length;
   }
 
-  String _extractErrorMessage(String rawBody) {
-    try {
-      final json = jsonDecode(rawBody) as Map<String, dynamic>;
-      final error = json['error'] as Map<String, dynamic>?;
-      return error?['message'] as String? ?? 'Groq request failed.';
-    } catch (_) {
-      return 'Groq request failed.';
-    }
-  }
-
   String? _friendlyMessageForStatusCode(int statusCode) {
     if (statusCode == 401 || statusCode == 403) {
-      return 'API key error. Please contact support.';
+      return _missingKeyMessage;
     }
     return null;
+  }
+
+  Future<String> _sendTranslationPrompt({
+    required String text,
+    required String targetLanguage,
+  }) async {
+    final response = await _client.post(
+      _chatCompletionsUri,
+      headers: <String, String>{
+        'Authorization': 'Bearer $deepseekApiKey',
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode(
+        <String, dynamic>{
+          'model': aiModel,
+          'messages': <Map<String, String>>[
+            <String, String>{
+              'role': 'system',
+              'content':
+                  'Translate the following text to ${_languageName(targetLanguage)}. Only return the translated text, nothing else.',
+            },
+            <String, String>{
+              'role': 'user',
+              'content': text,
+            },
+          ],
+          'temperature': 0.2,
+        },
+      ),
+    );
+
+    if (response.statusCode < 200 || response.statusCode >= 300) {
+      final friendly = _friendlyMessageForStatusCode(response.statusCode);
+      throw Exception(friendly ?? _networkErrorMessage);
+    }
+
+    final json = jsonDecode(response.body) as Map<String, dynamic>;
+    final choices = json['choices'] as List<dynamic>? ?? <dynamic>[];
+    final firstChoice =
+        choices.isNotEmpty ? choices.first as Map<String, dynamic> : null;
+    final message = firstChoice?['message'] as Map<String, dynamic>?;
+    final content = message?['content'] as String?;
+
+    if (content == null || content.trim().isEmpty) {
+      throw Exception(_networkErrorMessage);
+    }
+
+    return content.trim();
   }
 
   String _languageName(String codeOrName) {
