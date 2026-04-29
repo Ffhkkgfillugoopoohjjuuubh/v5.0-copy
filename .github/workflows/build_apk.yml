@@ -1,0 +1,35 @@
+name: Build Echo AI APK
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:  # Allows manual triggering from GitHub UI
+
+jobs:
+  build:
+    name: Build Android APK
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.41.8'
+          channel: 'stable'
+
+      - name: Build APK
+        run: flutter build apk --release --dart-define=DEEPSEEK_API_KEY=${{ secrets.DEEPSEEK_API_KEY }}
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release
+          path: build/app/outputs/flutter-apk/app-release.apk
